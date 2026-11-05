@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>United States Mortality by Cause of Death, Race, and Gender — DASIL</title>
+<meta name="description" content="Interactive comparison of US mortality rates by cause of death, race and gender, 1969–2009. Data Analysis and Social Inquiry Lab, Grinnell College.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<div class="viz-root" id="root">
+
+  <header class="site-head">
+    <div class="wrap">
+      <a class="lab" href="https://dasil.sites.grinnell.edu/">Data Analysis and Social Inquiry Lab · Grinnell College</a>
+      <button id="themeBtn" type="button" aria-pressed="false">Toggle dark mode</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <h1>United States Mortality by Cause of Death, Race, and Gender</h1>
+
+    <p class="standfirst">
+      Mortality rates in the United States from 1969 to 2009, broken out by cause of
+      death, race and gender. Build a comparison by adding up to eight series to the
+      chart, then hover or use the arrow keys to read values year by year.
+    </p>
+
+    <!-- Controls: one band, above everything it scopes. -->
+    <section class="controls" aria-label="Chart controls">
+
+      <div class="control-row">
+        <div class="field grow">
+          <label for="causeSel">Cause of death</label>
+          <select id="causeSel"></select>
+        </div>
+        <div class="field">
+          <label for="sexSel">Gender</label>
+          <select id="sexSel"></select>
+        </div>
+        <div class="field">
+          <label for="raceSel">Race</label>
+          <select id="raceSel"></select>
+        </div>
+        <div class="field">
+          <button id="addBtn" class="primary" type="button">Add series</button>
+        </div>
+        <p class="control-note" id="controlNote"></p>
+      </div>
+
+      <div class="control-row">
+        <button id="byRaceBtn" type="button">Compare races</button>
+        <button id="bySexBtn" type="button">Compare genders</button>
+        <button id="clearBtn" type="button">Clear all</button>
+
+        <span class="spacer"></span>
+
+        <div class="segmented" role="group" aria-label="Vertical axis scale">
+          <input type="radio" name="scale" id="scaleLinear" value="linear" checked>
+          <label for="scaleLinear">Linear</label>
+          <input type="radio" name="scale" id="scaleLog" value="log">
+          <label for="scaleLog">Log</label>
+        </div>
+
+        <button id="tableBtn" type="button" aria-expanded="false" aria-controls="tableView">Show data table</button>
+        <button id="downloadBtn" type="button">Download selection (CSV)</button>
+      </div>
+
+    </section>
+
+    <section class="chart-card">
+      <p class="y-label">
+        Deaths per 100,000 people
+        <span class="unit-flag" id="axisNote">— see “About these numbers” below</span>
+      </p>
+
+      <figure style="margin:0">
+        <div id="chartWrap">
+          <svg id="chart" role="img" tabindex="0" aria-label="Mortality rate line chart"></svg>
+          <div id="tooltip" role="presentation" data-show="0"></div>
+          <p class="empty-state" id="emptyState" hidden>
+            No series selected. Choose a cause, gender and race above, then press
+            <strong>Add series</strong>.
+          </p>
+        </div>
+      </figure>
+
+      <p class="visually-hidden" id="live" role="status" aria-live="polite"></p>
+
+      <div class="legend" id="legend" aria-label="Series shown"></div>
+    </section>
+
+    <section id="tableView" hidden>
+      <div class="table-wrap" id="tableHost"></div>
+    </section>
+
+    <section class="notes">
+      <h2>About these numbers</h2>
+
+      <p class="caveat">
+        <strong>Units are unconfirmed.</strong> The visualization this page replaces
+        carried no axis label, so the rates here are shown as deaths per 100,000
+        people — the usual convention for this source — but that has not been
+        verified against the original extract, and it is not known whether the
+        rates are age-adjusted. Confirm both before citing these figures.
+      </p>
+
+      <dl>
+        <dt>Source</dt>
+        <dd>
+          Mortality records from the
+          <a href="https://www.nber.org/research/data/mortality-data-vital-statistics-nchs-multiple-cause-death-data" rel="noopener">National
+          Center for Health Statistics</a>, distributed by the National Bureau of
+          Economic Research.
+        </dd>
+
+        <dt>Coverage</dt>
+        <dd>
+          Nine five-year snapshots: 1969, 1974, 1979, 1984, 1989, 1994, 1999, 2004
+          and 2009. The lines connect these observations; they are not annual data,
+          and nothing is known about the years in between.
+        </dd>
+
+        <dt>The 1999 break</dt>
+        <dd>
+          The United States moved from ICD-9 to ICD-10 cause-of-death coding in 1999,
+          marked on the chart. Several causes — particularly perinatal conditions and
+          pregnancy and childbirth — jump sharply across that line. Those jumps are
+          mostly reclassification, not a change in mortality, so comparisons spanning
+          1999 should be made with care.
+        </dd>
+
+        <dt>Known data problems</dt>
+        <dd>
+          In the 1999, 2004 and 2009 snapshots, many aggregate values fall outside
+          the range of the components they summarise — which is arithmetically
+          impossible. This affects 87 of 486 “All races” cells and 142 of 648
+          “All genders” cells, and it is confined to those three years. Treat the
+          “All races” and “All genders” figures from 1999 onward as unreliable
+          pending a corrected extract; the individual race and gender series are
+          unaffected.
+        </dd>
+
+        <dt>Reading the chart</dt>
+        <dd>
+          Switch the vertical axis to <strong>Log</strong> when comparing causes of very
+          different size — rates here span roughly 0.1 to 400 per 100,000, and a linear
+          axis flattens everything below the largest series.
+        </dd>
+      </dl>
+
+      <p>
+        Produced by the Data Analysis and Social Inquiry Lab,
+        <a href="https://www.grinnell.edu/" rel="noopener">Grinnell College</a>.
+      </p>
+    </section>
+
+  </main>
+</div>
+
+<script src="data/mortality-data.js"></script>
+<script src="assets/chart.js"></script>
+</body>
+</html>

@@ -1,0 +1,1499 @@
+<!doctype>
+<head>
+<link type="txt/css"rel="stylesheet"href="Headers.css">
+        <div id=blackBar><a href="http://www.grinnell.edu/"><img src="http://dasil.grinnell.edu/wp-content/uploads/2014/10/grinnell_logo.png"alt="Grinnell College logo"></a></div>
+        <br><br>
+        <a href="http://dasil.grinnell.edu/"><div id=dasilLabel>DATA ANALYSIS AND SOCIAL INQUIRY LAB</div></a>
+        <br><br>
+  <link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css">
+  <link type="text/css" rel="stylesheet" href="ss/src/css/graph.css">
+  <link type="text/css" rel="stylesheet" href="ss/src/css/detail.css">
+  <link type="text/css" rel="stylesheet" href="ss/src/css/legend.css">
+  <link type="text/css" rel="stylesheet" href="ss/examples/css/extensions.css">
+
+  <script src="ss/vendor/d3.min.js"></script>
+  <script src="ss/vendor/d3.layout.min.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.15/jquery-ui.min.js"></script>
+
+  <script src="ss/src/js/Rickshaw.js"></script>
+  <script src="ss/src/js/Rickshaw.Class.js"></script>
+  <script src="ss/src/js/Rickshaw.Compat.ClassList.js"></script>
+  <script src="ss/src/js/Rickshaw.Graph.js"></script>
+  <script src="ss/src/js/Rickshaw.Graph.Renderer.js"></script>
+  <script src="ss/src/js/Rickshaw.Graph.Renderer.Area.js"></script>
+  <script src="ss/src/js/Rickshaw.Graph.Renderer.Line.js"></script>
+  <script src="ss/src/js/Rickshaw.Graph.Renderer.Bar.js"></script>
+  <script src="ss/src/js/Rickshaw.Graph.Renderer.ScatterPlot.js"></script>
+  <script src="ss/src/js/Rickshaw.Graph.RangeSlider.js"></script>
+  <script src="ss/src/js/Rickshaw.Graph.HoverDetail.js"></script>
+  <script src="ss/src/js/Rickshaw.Graph.Annotate.js"></script>
+  <script src="ss/src/js/Rickshaw.Graph.Legend.js"></script>
+  <script src="ss/src/js/Rickshaw.Graph.Axis.Time.js"></script>
+  <script src="ss/src/js/Rickshaw.Graph.Behavior.Series.Toggle.js"></script>
+  <script src="ss/src/js/Rickshaw.Graph.Behavior.Series.Order.js"></script>
+  <script src="ss/src/js/Rickshaw.Graph.Behavior.Series.Highlight.js"></script>
+  <script src="ss/src/js/Rickshaw.Graph.Smoother.js"></script>
+  <script src="ss/src/js/Rickshaw.Graph.Unstacker.js"></script>
+  <script src="ss/src/js/Rickshaw.Fixtures.Time.js"></script>
+  <script src="ss/src/js/Rickshaw.Fixtures.Number.js"></script>
+  <script src="ss/src/js/Rickshaw.Fixtures.RandomData.js"></script>
+  <script src="ss/src/js/Rickshaw.Fixtures.Color.js"></script>
+  <script src="ss/src/js/Rickshaw.Color.Palette.js"></script>
+  <script src="ss/src/js/Rickshaw.Graph.Axis.Y.js"></script>
+
+  <script src="ss/examples/js/extensions.js"></script>
+
+  <style>
+.Cause_of_Death{
+float: left;
+width: 33%;
+border:none;
+}
+
+.Sex{
+float: left;
+width: 33%;
+border:none;
+}
+
+.Race{
+float: left;
+width: 33%;
+border:none;
+}
+
+  </style>
+
+</head>
+<body>
+
+  <div id="content">
+
+    <form id="side_panel">
+      <h1>
+United States Mortality by Cause of Death, Race, and Gender      </h1>
+      <section>
+	<div id="renderer_form" class="toggler">
+	  <input type="radio" name="renderer" id="area" value="area" checked>
+	  <label for="area">area</label>
+	  <input type="radio" name="renderer" id="bar" value="bar">
+	  <label for="bar">bar</label>
+	  <input type="radio" name="renderer" id="line" value="line">
+	  <label for="line">line</label>
+	  <input type="radio" name="renderer" id="scatter" value="scatterplot">
+	  <label for="scatter">scatter</label>
+	</div>
+      </section>
+      <section>
+	<div id="offset_form">
+	  <label for="stack">
+	    <input type="radio" name="offset" id="stack" value="zero" checked>
+	    <span>stack</span>
+	  </label>
+	  <label for="stream">
+	    <input type="radio" name="offset" id="stream" value="wiggle">
+	    <span>stream</span>
+	  </label>
+	  <label for="pct">
+	    <input type="radio" name="offset" id="pct" value="expand">
+	    <span>pct</span>
+	  </label>
+	  <label for="value">
+	    <input type="radio" name="offset" id="value" value="value">
+	    <span>value</span>
+	  </label>
+	</div>
+	<div id="interpolation_form">
+	  <label for="cardinal">
+	    <input type="radio" name="interpolation" id="cardinal" value="cardinal" checked>
+	    <span>cardinal</span>
+	  </label>
+	  <label for="linear">
+	    <input type="radio" name="interpolation" id="linear" value="linear">
+	    <span>linear</span>
+	  </label>
+	  <label for="step">
+	    <input type="radio" name="interpolation" id="step" value="step-after">
+	    <span>step</span>
+	  </label>
+	</div>
+      </section>
+      <section>
+	<h6>Smoothing</h6>
+	<div id="smoother"></div>
+      </section>
+      <section><div id="legend"></div></section>
+    </form>
+
+    <div id="chart_container">		
+      <div id="chart"></div>
+      <div id="timeline"></div>
+      <div id="slider"></div>	      
+      <div id="abstract"> 
+	<p>
+
+        </p>	
+      </div>	
+      
+      <div class="red">
+<div class="Cause_of_Death">
+<input onclick="redFunc()" name="red_Cause_of_Death" type="radio" value="0" checked>
+<label>Blood_Diseases</label><br>
+<input onclick="redFunc()" name="red_Cause_of_Death" type="radio" value="1" >
+<label>Cancer</label><br>
+<input onclick="redFunc()" name="red_Cause_of_Death" type="radio" value="2" >
+<label>Circulatory_system</label><br>
+<input onclick="redFunc()" name="red_Cause_of_Death" type="radio" value="3" >
+<label>Congenital_anomalies</label><br>
+<input onclick="redFunc()" name="red_Cause_of_Death" type="radio" value="4" >
+<label>Digestive_System</label><br>
+<input onclick="redFunc()" name="red_Cause_of_Death" type="radio" value="5" >
+<label>Endocr_Nutr_Metab_Immunity</label><br>
+<input onclick="redFunc()" name="red_Cause_of_Death" type="radio" value="6" >
+<label>Genitourinary_system</label><br>
+<input onclick="redFunc()" name="red_Cause_of_Death" type="radio" value="7" >
+<label>Ill-defined_conditions</label><br>
+<input onclick="redFunc()" name="red_Cause_of_Death" type="radio" value="8" >
+<label>Infection</label><br>
+<input onclick="redFunc()" name="red_Cause_of_Death" type="radio" value="9" >
+<label>Injury_and_poisoning</label><br>
+<input onclick="redFunc()" name="red_Cause_of_Death" type="radio" value="10" >
+<label>Mental_health</label><br>
+<input onclick="redFunc()" name="red_Cause_of_Death" type="radio" value="11" >
+<label>Muscles_and_Skeleton</label><br>
+<input onclick="redFunc()" name="red_Cause_of_Death" type="radio" value="12" >
+<label>Nervous_System</label><br>
+<input onclick="redFunc()" name="red_Cause_of_Death" type="radio" value="13" >
+<label>Perinatal_conditions</label><br>
+<input onclick="redFunc()" name="red_Cause_of_Death" type="radio" value="14" >
+<label>Pregnancy_and_Childbirth</label><br>
+<input onclick="redFunc()" name="red_Cause_of_Death" type="radio" value="15" >
+<label>Respiratory_System</label><br>
+<input onclick="redFunc()" name="red_Cause_of_Death" type="radio" value="16" >
+<label>Sense_Organs</label><br>
+<input onclick="redFunc()" name="red_Cause_of_Death" type="radio" value="17" >
+<label>Skin_disease</label><br>
+</div>
+<div class="Sex">
+<input onclick="redFunc()" name="red_Sex" type="radio" value="0" checked>
+<label>Female</label><br>
+<input onclick="redFunc()" name="red_Sex" type="radio" value="1" >
+<label>Male</label><br>
+<input onclick="redFunc()" name="red_Sex" type="radio" value="2" >
+<label>All_Genders</label><br>
+</div>
+<div class="Race">
+<input onclick="redFunc()" name="red_Race" type="radio" value="0" checked>
+<label>Black</label><br>
+<input onclick="redFunc()" name="red_Race" type="radio" value="1" >
+<label>Other</label><br>
+<input onclick="redFunc()" name="red_Race" type="radio" value="2" >
+<label>White</label><br>
+<input onclick="redFunc()" name="red_Race" type="radio" value="3" >
+<label>All_Races</label><br>
+</div>
+      </div>
+      
+      <div class="blue">
+<div class="Cause_of_Death">
+<input onclick="blueFunc()" name="blue_Cause_of_Death" type="radio" value="0" >
+<label>Blood_Diseases</label><br>
+<input onclick="blueFunc()" name="blue_Cause_of_Death" type="radio" value="1" checked>
+<label>Cancer</label><br>
+<input onclick="blueFunc()" name="blue_Cause_of_Death" type="radio" value="2" >
+<label>Circulatory_system</label><br>
+<input onclick="blueFunc()" name="blue_Cause_of_Death" type="radio" value="3" >
+<label>Congenital_anomalies</label><br>
+<input onclick="blueFunc()" name="blue_Cause_of_Death" type="radio" value="4" >
+<label>Digestive_System</label><br>
+<input onclick="blueFunc()" name="blue_Cause_of_Death" type="radio" value="5" >
+<label>Endocr_Nutr_Metab_Immunity</label><br>
+<input onclick="blueFunc()" name="blue_Cause_of_Death" type="radio" value="6" >
+<label>Genitourinary_system</label><br>
+<input onclick="blueFunc()" name="blue_Cause_of_Death" type="radio" value="7" >
+<label>Ill-defined_conditions</label><br>
+<input onclick="blueFunc()" name="blue_Cause_of_Death" type="radio" value="8" >
+<label>Infection</label><br>
+<input onclick="blueFunc()" name="blue_Cause_of_Death" type="radio" value="9" >
+<label>Injury_and_poisoning</label><br>
+<input onclick="blueFunc()" name="blue_Cause_of_Death" type="radio" value="10" >
+<label>Mental_health</label><br>
+<input onclick="blueFunc()" name="blue_Cause_of_Death" type="radio" value="11" >
+<label>Muscles_and_Skeleton</label><br>
+<input onclick="blueFunc()" name="blue_Cause_of_Death" type="radio" value="12" >
+<label>Nervous_System</label><br>
+<input onclick="blueFunc()" name="blue_Cause_of_Death" type="radio" value="13" >
+<label>Perinatal_conditions</label><br>
+<input onclick="blueFunc()" name="blue_Cause_of_Death" type="radio" value="14" >
+<label>Pregnancy_and_Childbirth</label><br>
+<input onclick="blueFunc()" name="blue_Cause_of_Death" type="radio" value="15" >
+<label>Respiratory_System</label><br>
+<input onclick="blueFunc()" name="blue_Cause_of_Death" type="radio" value="16" >
+<label>Sense_Organs</label><br>
+<input onclick="blueFunc()" name="blue_Cause_of_Death" type="radio" value="17" >
+<label>Skin_disease</label><br>
+</div>
+<div class="Sex">
+<input onclick="blueFunc()" name="blue_Sex" type="radio" value="0" checked>
+<label>Female</label><br>
+<input onclick="blueFunc()" name="blue_Sex" type="radio" value="1" >
+<label>Male</label><br>
+<input onclick="blueFunc()" name="blue_Sex" type="radio" value="2" >
+<label>All_Genders</label><br>
+</div>
+<div class="Race">
+<input onclick="blueFunc()" name="blue_Race" type="radio" value="0" checked>
+<label>Black</label><br>
+<input onclick="blueFunc()" name="blue_Race" type="radio" value="1" >
+<label>Other</label><br>
+<input onclick="blueFunc()" name="blue_Race" type="radio" value="2" >
+<label>White</label><br>
+<input onclick="blueFunc()" name="blue_Race" type="radio" value="3" >
+<label>All_Races</label><br>
+</div>
+      </div>
+
+      
+    </div>
+  </div>
+  
+  <script>
+    
+
+                        var palette = new Rickshaw.Color.Palette( { scheme: 'classic9' } );
+
+                        // instantiate our graph!
+
+                        // var ajaxGraph = new Rickshaw.Graph.Ajax( {
+                        var graph = new Rickshaw.Graph( {
+	                element: document.getElementById("chart"),
+	                width: 900,
+	                height: 500,
+	                //min: 'auto',
+	                renderer: 'line',
+	                stroke: true,
+	                
+                        series: [
+                        
+{
+name: "Skin_disease, All_Genders, All_Races ",
+data: [ { x: -31514400, y: 0.097607168}, { x: 126252000, y: 0.108392771}, { x: 284018400, y: 0.183693869}, { x: 441784800, y: 0.219164238}, { x: 599637600, y: 0.247694951}, { x: 757404000, y: 0.280814691}, { x: 915170400, y: 3.512749531}, { x: 1072936800, y: 4.660418539}, { x: 1230789600, y: 5.501643722} ], 
+color: palette.color()
+},
+{
+name: "Skin_disease, All_Genders, White ",
+data: [ { x: -31514400, y: 0.089153028}, { x: 126252000, y: 0.096221865}, { x: 284018400, y: 0.158447831}, { x: 441784800, y: 0.183253951}, { x: 599637600, y: 0.214305873}, { x: 757404000, y: 0.250738049}, { x: 915170400, y: 3.737296322}, { x: 1072936800, y: 4.94608273}, { x: 1230789600, y: 5.821544949} ], 
+color: palette.color()
+},
+{
+name: "Skin_disease, All_Genders, Other ",
+data: [ { x: -31514400, y: 0.163666121}, { x: 126252000, y: 0.15404005}, { x: 284018400, y: 0.364431487}, { x: 441784800, y: 0.473337175}, { x: 599637600, y: 0.457778691}, { x: 757404000, y: 0.433182333}, { x: 915170400, y: 2.100118875}, { x: 1072936800, y: 2.763860901}, { x: 1230789600, y: 3.697109504} ], 
+color: palette.color()
+},
+{
+name: "Skin_disease, All_Genders, Black ",
+data: [ { x: -31514400, y: 0.156958725}, { x: 126252000, y: 0.198209833}, { x: 284018400, y: 0.327523687}, { x: 441784800, y: 0.406188672}, { x: 599637600, y: 0.442899973}, { x: 757404000, y: 0.711168579}, { x: 915170400, y: 2.113539688}, { x: 1072936800, y: 2.960214244}, { x: 1230789600, y: 3.577408777} ], 
+color: palette.color()
+},
+{
+name: "Skin_disease, Male, All_Races ",
+data: [ { x: -31514400, y: 0.074473183}, { x: 126252000, y: 0.079398806}, { x: 284018400, y: 0.137062844}, { x: 441784800, y: 0.170796885}, { x: 599637600, y: 0.20985842}, { x: 757404000, y: 0.266969518}, { x: 915170400, y: 2.906872588}, { x: 1072936800, y: 3.667596075}, { x: 1230789600, y: 4.412649886} ], 
+color: palette.color()
+},
+{
+name: "Skin_disease, Male, White ",
+data: [ { x: -31514400, y: 0.067909201}, { x: 126252000, y: 0.069088459}, { x: 284018400, y: 0.118977909}, { x: 441784800, y: 0.145803892}, { x: 599637600, y: 0.185877118}, { x: 757404000, y: 0.245901391}, { x: 915170400, y: 0.09412017}, { x: 1072936800, y: 0.118626783}, { x: 1230789600, y: 0.127225728} ], 
+color: palette.color()
+},
+{
+name: "Skin_disease, Male, Other ",
+data: [ { x: -31514400, y: 0.107130104}, { x: 126252000, y: 0.11033874}, { x: 284018400, y: 0.248232648}, { x: 441784800, y: 0.332015076}, { x: 599637600, y: 0.331797235}, { x: 757404000, y: 0.354630773}, { x: 915170400, y: 0.08910851}, { x: 1072936800, y: 0.128718038}, { x: 1230789600, y: 0.141401049} ], 
+color: palette.color()
+},
+{
+name: "Skin_disease, Male, Black ",
+data: [ { x: -31514400, y: 0.121121554}, { x: 126252000, y: 0.153879102}, { x: 284018400, y: 0.388588759}, { x: 441784800, y: 0.36714089}, { x: 599637600, y: 0.499651406}, { x: 757404000, y: 0.61882942}, { x: 915170400, y: 0.226208674}, { x: 1072936800, y: 0.213943861}, { x: 1230789600, y: 0.190597205} ], 
+color: palette.color()
+},
+{
+name: "Skin_disease, Female, All_Races ",
+data: [ { x: -31514400, y: 0.127338704}, { x: 126252000, y: 0.144426994}, { x: 284018400, y: 0.239822214}, { x: 441784800, y: 0.273284708}, { x: 599637600, y: 0.288415565}, { x: 757404000, y: 0.295249253}, { x: 915170400, y: 4.099014538}, { x: 1072936800, y: 5.624284765}, { x: 1230789600, y: 6.589712265} ], 
+color: palette.color()
+},
+{
+name: "Skin_disease, Female, White ",
+data: [ { x: -31514400, y: 0.116357509}, { x: 126252000, y: 0.129651766}, { x: 284018400, y: 0.205385133}, { x: 441784800, y: 0.224587961}, { x: 599637600, y: 0.244271566}, { x: 757404000, y: 0.255667642}, { x: 915170400, y: 0.164247268}, { x: 1072936800, y: 0.189769943}, { x: 1230789600, y: 0.172647064} ], 
+color: palette.color()
+},
+{
+name: "Skin_disease, Female, Other ",
+data: [ { x: -31514400, y: 0.270880361}, { x: 126252000, y: 0.229929105}, { x: 284018400, y: 0.514458781}, { x: 441784800, y: 0.644357656}, { x: 599637600, y: 0.609856601}, { x: 757404000, y: 0.526100291}, { x: 915170400, y: 0.159135844}, { x: 1072936800, y: 0.149925037}, { x: 1230789600, y: 0.208843204} ], 
+color: palette.color()
+},
+{
+name: "Skin_disease, Female, Black ",
+data: [ { x: -31514400, y: 0.203268558}, { x: 126252000, y: 0.255873219}, { x: 284018400, y: 0.229112571}, { x: 441784800, y: 0.463958357}, { x: 599637600, y: 0.362438221}, { x: 757404000, y: 0.833698991}, { x: 915170400, y: 0.454431423}, { x: 1072936800, y: 0.434745787}, { x: 1230789600, y: 0.353583598} ], 
+color: palette.color()
+},
+{
+name: "Sense_Organs, All_Genders, All_Races ",
+data: [ { x: -31514400, y: 0.210667069}, { x: 126252000, y: 0.297602449}, { x: 284018400, y: 0.447000589}, { x: 441784800, y: 0.757135079}, { x: 599637600, y: 0.916169536}, { x: 757404000, y: 0.909744958}, { x: 915170400, y: 2.219758746}, { x: 1072936800, y: 2.51649429}, { x: 1230789600, y: 2.605733294} ], 
+color: palette.color()
+},
+{
+name: "Sense_Organs, All_Genders, White ",
+data: [ { x: -31514400, y: 0.182820134}, { x: 126252000, y: 0.264654266}, { x: 284018400, y: 0.405054605}, { x: 441784800, y: 0.689584058}, { x: 599637600, y: 0.854853686}, { x: 757404000, y: 0.855597099}, { x: 915170400, y: 2.098716867}, { x: 1072936800, y: 2.388375275}, { x: 1230789600, y: 2.463040508} ], 
+color: palette.color()
+},
+{
+name: "Sense_Organs, All_Genders, Other ",
+data: [ { x: -31514400, y: 0.467617489}, { x: 126252000, y: 0.553143817}, { x: 284018400, y: 0.75330931}, { x: 441784800, y: 1.269153841}, { x: 599637600, y: 1.353546291}, { x: 757404000, y: 1.30556342}, { x: 915170400, y: 2.27402809}, { x: 1072936800, y: 2.368231314}, { x: 1230789600, y: 2.641234847} ], 
+color: palette.color()
+},
+{
+name: "Sense_Organs, All_Genders, Black ",
+data: [ { x: -31514400, y: 0.403924855}, { x: 126252000, y: 0.532296543}, { x: 284018400, y: 0.608258276}, { x: 441784800, y: 0.74391858}, { x: 599637600, y: 0.804033797}, { x: 757404000, y: 0.759657346}, { x: 915170400, y: 3.086566829}, { x: 1072936800, y: 3.468169645}, { x: 1230789600, y: 3.637410172} ], 
+color: palette.color()
+},
+{
+name: "Sense_Organs, Male, All_Races ",
+data: [ { x: -31514400, y: 0.204454329}, { x: 126252000, y: 0.292713203}, { x: 284018400, y: 0.408800676}, { x: 441784800, y: 0.675120587}, { x: 599637600, y: 0.776646332}, { x: 757404000, y: 0.772752284}, { x: 915170400, y: 1.959933605}, { x: 1072936800, y: 2.269421327}, { x: 1230789600, y: 2.40916628} ], 
+color: palette.color()
+},
+{
+name: "Sense_Organs, Male, White ",
+data: [ { x: -31514400, y: 0.176119656}, { x: 126252000, y: 0.259081721}, { x: 284018400, y: 0.36833806}, { x: 441784800, y: 0.615580828}, { x: 599637600, y: 0.721677617}, { x: 757404000, y: 0.724177578}, { x: 915170400, y: 0.004567012}, { x: 1072936800, y: 0.003666826}, { x: 1230789600, y: 0.003464543} ], 
+color: palette.color()
+},
+{
+name: "Sense_Organs, Male, Other ",
+data: [ { x: -31514400, y: 0.416617069}, { x: 126252000, y: 0.518592078}, { x: 284018400, y: 0.687660668}, { x: 441784800, y: 1.107490848}, { x: 599637600, y: 1.141491722}, { x: 757404000, y: 1.101771848}, { x: 915170400, y: 0.01215116}, { x: 1072936800, y: 0.003478866}, { x: 1230789600, y: 0.00589171} ], 
+color: palette.color()
+},
+{
+name: "Sense_Organs, Male, Black ",
+data: [ { x: -31514400, y: 0.401116835}, { x: 126252000, y: 0.526678988}, { x: 284018400, y: 0.61605535}, { x: 441784800, y: 0.665442864}, { x: 599637600, y: 0.714617709}, { x: 757404000, y: 0.666068307}, { x: 915170400, y: 0.005483847}, { x: 1072936800, y: 0.005556983}, { x: 1230789600, y: 0.002732576} ], 
+color: palette.color()
+},
+{
+name: "Sense_Organs, Female, All_Races ",
+data: [ { x: -31514400, y: 0.218651613}, { x: 126252000, y: 0.303678893}, { x: 284018400, y: 0.492980659}, { x: 441784800, y: 0.84890489}, { x: 599637600, y: 1.066327868}, { x: 757404000, y: 1.052569402}, { x: 915170400, y: 2.471173477}, { x: 1072936800, y: 2.756361229}, { x: 1230789600, y: 2.802133289} ], 
+color: palette.color()
+},
+{
+name: "Sense_Organs, Female, White ",
+data: [ { x: -31514400, y: 0.191400652}, { x: 126252000, y: 0.27151996}, { x: 284018400, y: 0.448717614}, { x: 441784800, y: 0.771262173}, { x: 599637600, y: 0.995229624}, { x: 757404000, y: 0.989541805}, { x: 915170400, y: 0.003973724}, { x: 1072936800, y: 0.004570475}, { x: 1230789600, y: 0.004763992} ], 
+color: palette.color()
+},
+{
+name: "Sense_Organs, Female, Other ",
+data: [ { x: -31514400, y: 0.564334086}, { x: 126252000, y: 0.613144281}, { x: 284018400, y: 0.83806995}, { x: 441784800, y: 1.464789788}, { x: 599637600, y: 1.609526949}, { x: 757404000, y: 1.546626701}, { x: 915170400, y: 0.014466895}, { x: 1072936800, y: 0.003945396}, { x: 1230789600, y: 0.0} ], 
+color: palette.color()
+},
+{
+name: "Sense_Organs, Female, Black ",
+data: [ { x: -31514400, y: 0.40755346}, { x: 126252000, y: 0.539603603}, { x: 284018400, y: 0.595692684}, { x: 441784800, y: 0.860020369}, { x: 599637600, y: 0.930807249}, { x: 757404000, y: 0.883846299}, { x: 915170400, y: 0.011468301}, { x: 1072936800, y: 0.006351805}, { x: 1230789600, y: 0.007128702} ], 
+color: palette.color()
+},
+{
+name: "Respiratory_System, All_Genders, All_Races ",
+data: [ { x: -31514400, y: 6.059188653}, { x: 126252000, y: 5.648352988}, { x: 284018400, y: 5.845231785}, { x: 441784800, y: 7.354879587}, { x: 599637600, y: 8.709623053}, { x: 757404000, y: 9.293700006}, { x: 915170400, y: 2.509363296}, { x: 1072936800, y: 2.698986083}, { x: 1230789600, y: 2.856687333} ], 
+color: palette.color()
+},
+{
+name: "Respiratory_System, All_Genders, White ",
+data: [ { x: -31514400, y: 6.015602077}, { x: 126252000, y: 5.773017624}, { x: 284018400, y: 6.027093388}, { x: 441784800, y: 7.629024512}, { x: 599637600, y: 9.093807697}, { x: 757404000, y: 9.792694}, { x: 915170400, y: 2.064175071}, { x: 1072936800, y: 2.308298199}, { x: 1230789600, y: 2.552620416} ], 
+color: palette.color()
+},
+{
+name: "Respiratory_System, All_Genders, Other ",
+data: [ { x: -31514400, y: 7.357181825}, { x: 126252000, y: 5.825514634}, { x: 284018400, y: 4.479564674}, { x: 441784800, y: 5.316885891}, { x: 599637600, y: 6.136325449}, { x: 757404000, y: 6.004742356}, { x: 915170400, y: 3.051116101}, { x: 1072936800, y: 2.94873454}, { x: 1230789600, y: 2.967905745} ], 
+color: palette.color()
+},
+{
+name: "Respiratory_System, All_Genders, Black ",
+data: [ { x: -31514400, y: 6.310716202}, { x: 126252000, y: 4.687079589}, { x: 284018400, y: 5.632237689}, { x: 441784800, y: 6.978230113}, { x: 599637600, y: 7.887026438}, { x: 757404000, y: 7.946770109}, { x: 915170400, y: 5.642996797}, { x: 1072936800, y: 5.468134638}, { x: 1230789600, y: 5.047094118} ], 
+color: palette.color()
+},
+{
+name: "Respiratory_System, Male, All_Races ",
+data: [ { x: -31514400, y: 6.842003985}, { x: 126252000, y: 6.48544728}, { x: 284018400, y: 6.63823528}, { x: 441784800, y: 7.972839401}, { x: 599637600, y: 8.790586735}, { x: 757404000, y: 9.119283869}, { x: 915170400, y: 2.763808642}, { x: 1072936800, y: 2.909994034}, { x: 1230789600, y: 2.9385957} ], 
+color: palette.color()
+},
+{
+name: "Respiratory_System, Male, White ",
+data: [ { x: -31514400, y: 6.823816878}, { x: 126252000, y: 6.643047228}, { x: 284018400, y: 6.850166788}, { x: 441784800, y: 8.253888905}, { x: 599637600, y: 9.150695858}, { x: 757404000, y: 9.610444147}, { x: 915170400, y: 9.941492599}, { x: 1072936800, y: 9.680916746}, { x: 1230789600, y: 9.906380341} ], 
+color: palette.color()
+},
+{
+name: "Respiratory_System, Male, Other ",
+data: [ { x: -31514400, y: 7.237233663}, { x: 126252000, y: 6.333443672}, { x: 284018400, y: 5.159061697}, { x: 441784800, y: 5.993297784}, { x: 599637600, y: 6.500768049}, { x: 757404000, y: 6.071827426}, { x: 915170400, y: 7.849649642}, { x: 1072936800, y: 7.817011654}, { x: 1230789600, y: 8.357391151} ], 
+color: palette.color()
+},
+{
+name: "Respiratory_System, Male, Black ",
+data: [ { x: -31514400, y: 6.951118801}, { x: 126252000, y: 5.323899645}, { x: 284018400, y: 5.771964743}, { x: 441784800, y: 7.411656723}, { x: 599637600, y: 8.3430165}, { x: 757404000, y: 8.177051349}, { x: 915170400, y: 6.368802396}, { x: 1072936800, y: 6.15991609}, { x: 1230789600, y: 6.146247489} ], 
+color: palette.color()
+},
+{
+name: "Respiratory_System, Female, All_Races ",
+data: [ { x: -31514400, y: 5.053123187}, { x: 126252000, y: 4.607997109}, { x: 284018400, y: 4.890717639}, { x: 441784800, y: 6.663415748}, { x: 599637600, y: 8.622487931}, { x: 757404000, y: 9.475541029}, { x: 915170400, y: 2.263154219}, { x: 1072936800, y: 2.494132299}, { x: 1230789600, y: 2.774848562} ], 
+color: palette.color()
+},
+{
+name: "Respiratory_System, Female, White ",
+data: [ { x: -31514400, y: 4.980616112}, { x: 126252000, y: 4.701091597}, { x: 284018400, y: 5.048301367}, { x: 441784800, y: 6.939355356}, { x: 599637600, y: 9.033844003}, { x: 757404000, y: 9.978445726}, { x: 915170400, y: 10.27917305}, { x: 1072936800, y: 10.30842139}, { x: 1230789600, y: 10.72498428} ], 
+color: palette.color()
+},
+{
+name: "Respiratory_System, Female, Other ",
+data: [ { x: -31514400, y: 7.584650113}, { x: 126252000, y: 4.943475762}, { x: 284018400, y: 3.602248683}, { x: 441784800, y: 4.498328229}, { x: 599637600, y: 5.696390308}, { x: 757404000, y: 5.925388009}, { x: 915170400, y: 7.170757583}, { x: 1072936800, y: 7.732975617}, { x: 1230789600, y: 8.170990374} ], 
+color: palette.color()
+},
+{
+name: "Respiratory_System, Female, Black ",
+data: [ { x: -31514400, y: 5.483169363}, { x: 126252000, y: 3.858733221}, { x: 284018400, y: 5.407056667}, { x: 441784800, y: 6.336992192}, { x: 599637600, y: 7.240527183}, { x: 757404000, y: 7.641196013}, { x: 915170400, y: 6.091818084}, { x: 1072936800, y: 5.833780312}, { x: 1230789600, y: 6.456465019} ], 
+color: palette.color()
+},
+{
+name: "Pregnancy_and_Childbirth, All_Genders, All_Races ",
+data: [ { x: -31514400, y: 0.041675555}, { x: 126252000, y: 0.023857771}, { x: 284018400, y: 0.017633777}, { x: 441784800, y: 0.013954827}, { x: 599637600, y: 0.014949911}, { x: 757404000, y: 0.014371543}, { x: 915170400, y: 0.558081662}, { x: 1072936800, y: 0.576945843}, { x: 1230789600, y: 0.547033082} ], 
+color: palette.color()
+},
+{
+name: "Pregnancy_and_Childbirth, All_Genders, White ",
+data: [ { x: -31514400, y: 0.027500235}, { x: 126252000, y: 0.015124782}, { x: 284018400, y: 0.010841167}, { x: 441784800, y: 0.008910513}, { x: 599637600, y: 0.00974852}, { x: 757404000, y: 0.009833864}, { x: 915170400, y: 0.551893598}, { x: 1072936800, y: 0.571611438}, { x: 1230789600, y: 0.537240058} ], 
+color: palette.color()
+},
+{
+name: "Pregnancy_and_Childbirth, All_Genders, Other ",
+data: [ { x: -31514400, y: 0.116904372}, { x: 126252000, y: 0.077020025}, { x: 284018400, y: 0.065642939}, { x: 441784800, y: 0.049579633}, { x: 599637600, y: 0.04667401}, { x: 757404000, y: 0.041761042}, { x: 915170400, y: 0.622991238}, { x: 1072936800, y: 0.602688063}, { x: 1230789600, y: 0.613088511} ], 
+color: palette.color()
+},
+{
+name: "Pregnancy_and_Childbirth, All_Genders, Black ",
+data: [ { x: -31514400, y: 0.143213752}, { x: 126252000, y: 0.086997076}, { x: 284018400, y: 0.06433501}, { x: 441784800, y: 0.041075259}, { x: 599637600, y: 0.054510766}, { x: 757404000, y: 0.045794946}, { x: 915170400, y: 0.592505904}, { x: 1072936800, y: 0.610526684}, { x: 1230789600, y: 0.603502407} ], 
+color: palette.color()
+},
+{
+name: "Pregnancy_and_Childbirth, Male, All_Races ",
+data: [ { x: -31514400, y: 0.0}, { x: 126252000, y: 0.0}, { x: 284018400, y: 0.0}, { x: 441784800, y: 0.0}, { x: 599637600, y: 0.0}, { x: 757404000, y: 0.0}, { x: 915170400, y: 0.0}, { x: 1072936800, y: 0.0}, { x: 1230789600, y: 0.0} ], 
+color: palette.color()
+},
+{
+name: "Pregnancy_and_Childbirth, Male, White ",
+data: [ { x: -31514400, y: 0.0}, { x: 126252000, y: 0.0}, { x: 284018400, y: 0.0}, { x: 441784800, y: 0.0}, { x: 599637600, y: 0.0}, { x: 757404000, y: 0.0}, { x: 915170400, y: 0.0}, { x: 1072936800, y: 0.0}, { x: 1230789600, y: 0.0} ], 
+color: palette.color()
+},
+{
+name: "Pregnancy_and_Childbirth, Male, Other ",
+data: [ { x: -31514400, y: 0.0}, { x: 126252000, y: 0.0}, { x: 284018400, y: 0.0}, { x: 441784800, y: 0.0}, { x: 599637600, y: 0.0}, { x: 757404000, y: 0.0}, { x: 915170400, y: 0.0}, { x: 1072936800, y: 0.0}, { x: 1230789600, y: 0.0} ], 
+color: palette.color()
+},
+{
+name: "Pregnancy_and_Childbirth, Male, Black ",
+data: [ { x: -31514400, y: 0.0}, { x: 126252000, y: 0.0}, { x: 284018400, y: 0.0}, { x: 441784800, y: 0.0}, { x: 599637600, y: 0.0}, { x: 757404000, y: 0.0}, { x: 915170400, y: 0.0}, { x: 1072936800, y: 0.0}, { x: 1230789600, y: 0.0} ], 
+color: palette.color()
+},
+{
+name: "Pregnancy_and_Childbirth, Female, All_Races ",
+data: [ { x: -31514400, y: 0.09523651}, { x: 126252000, y: 0.053508638}, { x: 284018400, y: 0.038744049}, { x: 441784800, y: 0.02956953}, { x: 599637600, y: 0.031039376}, { x: 757404000, y: 0.029354882}, { x: 915170400, y: 0.784426489}, { x: 1072936800, y: 0.797284386}, { x: 1230789600, y: 0.744061885} ], 
+color: palette.color()
+},
+{
+name: "Pregnancy_and_Childbirth, Female, White ",
+data: [ { x: -31514400, y: 0.062716562}, { x: 126252000, y: 0.033759376}, { x: 284018400, y: 0.02360299}, { x: 441784800, y: 0.018745137}, { x: 599637600, y: 0.020024073}, { x: 757404000, y: 0.019856682}, { x: 915170400, y: 0.021003971}, { x: 1072936800, y: 0.039229913}, { x: 1230789600, y: 0.057739581} ], 
+color: palette.color()
+},
+{
+name: "Pregnancy_and_Childbirth, Female, Other ",
+data: [ { x: -31514400, y: 0.338600452}, { x: 126252000, y: 0.210768346}, { x: 284018400, y: 0.150396216}, { x: 441784800, y: 0.109578264}, { x: 599637600, y: 0.103016318}, { x: 757404000, y: 0.091159816}, { x: 915170400, y: 0.115735159}, { x: 1072936800, y: 0.13808885}, { x: 1230789600, y: 0.153369228} ], 
+color: palette.color()
+},
+{
+name: "Pregnancy_and_Childbirth, Female, Black ",
+data: [ { x: -31514400, y: 0.328278722}, { x: 126252000, y: 0.200158889}, { x: 284018400, y: 0.168015885}, { x: 441784800, y: 0.101844517}, { x: 599637600, y: 0.131795717}, { x: 757404000, y: 0.106563029}, { x: 915170400, y: 0.116833315}, { x: 1072936800, y: 0.177144793}, { x: 1230789600, y: 0.218851138} ], 
+color: palette.color()
+},
+{
+name: "Perinatal_conditions, All_Genders, All_Races ",
+data: [ { x: -31514400, y: 2.24616153}, { x: 126252000, y: 1.488270446}, { x: 284018400, y: 1.225495311}, { x: 441784800, y: 0.925474366}, { x: 599637600, y: 0.871551945}, { x: 757404000, y: 0.635414987}, { x: 915170400, y: 9.603088113}, { x: 1072936800, y: 9.474191876}, { x: 1230789600, y: 9.791224109} ], 
+color: palette.color()
+},
+{
+name: "Perinatal_conditions, All_Genders, White ",
+data: [ { x: -31514400, y: 1.92044295}, { x: 126252000, y: 1.230168585}, { x: 284018400, y: 0.957418039}, { x: 441784800, y: 0.699839555}, { x: 599637600, y: 0.609740334}, { x: 757404000, y: 0.436817171}, { x: 915170400, y: 10.11439971}, { x: 1072936800, y: 10.00094208}, { x: 1230789600, y: 10.31772859} ], 
+color: palette.color()
+},
+{
+name: "Perinatal_conditions, All_Genders, Other ",
+data: [ { x: -31514400, y: 3.873431533}, { x: 126252000, y: 2.926760958}, { x: 284018400, y: 3.179834489}, { x: 441784800, y: 2.54381653}, { x: 599637600, y: 2.601796016}, { x: 757404000, y: 1.95285957}, { x: 915170400, y: 7.539734954}, { x: 1072936800, y: 7.777633987}, { x: 1230789600, y: 8.268953879} ], 
+color: palette.color()
+},
+{
+name: "Perinatal_conditions, All_Genders, Black ",
+data: [ { x: -31514400, y: 4.585056997}, { x: 126252000, y: 3.362840589}, { x: 284018400, y: 2.298514446}, { x: 441784800, y: 1.871206243}, { x: 599637600, y: 1.645543745}, { x: 757404000, y: 1.107160175}, { x: 915170400, y: 6.233400374}, { x: 1072936800, y: 5.998144615}, { x: 1230789600, y: 6.298053443} ], 
+color: palette.color()
+},
+{
+name: "Perinatal_conditions, Male, All_Races ",
+data: [ { x: -31514400, y: 2.346969173}, { x: 126252000, y: 1.559552832}, { x: 284018400, y: 1.277502113}, { x: 441784800, y: 0.98926817}, { x: 599637600, y: 0.942526738}, { x: 757404000, y: 0.700730604}, { x: 915170400, y: 9.455125892}, { x: 1072936800, y: 9.206646048}, { x: 1230789600, y: 9.411887232} ], 
+color: palette.color()
+},
+{
+name: "Perinatal_conditions, Male, White ",
+data: [ { x: -31514400, y: 2.031035139}, { x: 126252000, y: 1.313853515}, { x: 284018400, y: 1.018385102}, { x: 441784800, y: 0.762986961}, { x: 599637600, y: 0.675496967}, { x: 757404000, y: 0.488067827}, { x: 915170400, y: 0.485393999}, { x: 1072936800, y: 0.499282987}, { x: 1230789600, y: 0.427389909} ], 
+color: palette.color()
+},
+{
+name: "Perinatal_conditions, Male, Other ",
+data: [ { x: -31514400, y: 3.499583383}, { x: 126252000, y: 2.692265254}, { x: 284018400, y: 3.109736504}, { x: 441784800, y: 2.546996773}, { x: 599637600, y: 2.603174603}, { x: 757404000, y: 2.016758427}, { x: 915170400, y: 1.024747863}, { x: 1072936800, y: 1.102800487}, { x: 1230789600, y: 0.995699051} ], 
+color: palette.color()
+},
+{
+name: "Perinatal_conditions, Male, Black ",
+data: [ { x: -31514400, y: 4.619922136}, { x: 126252000, y: 3.306021115}, { x: 284018400, y: 2.056677092}, { x: 441784800, y: 1.797460609}, { x: 599637600, y: 1.591912619}, { x: 757404000, y: 1.133733289}, { x: 915170400, y: 1.994749217}, { x: 1072936800, y: 0.203524517}, { x: 1230789600, y: 1.801450998} ], 
+color: palette.color()
+},
+{
+name: "Perinatal_conditions, Female, All_Races ",
+data: [ { x: -31514400, y: 2.116604682}, { x: 126252000, y: 1.399679411}, { x: 284018400, y: 1.162896307}, { x: 441784800, y: 0.854092527}, { x: 599637600, y: 0.795167111}, { x: 757404000, y: 0.567318888}, { x: 915170400, y: 9.74626087}, { x: 1072936800, y: 9.733934576}, { x: 1230789600, y: 10.17023867} ], 
+color: palette.color()
+},
+{
+name: "Perinatal_conditions, Female, White ",
+data: [ { x: -31514400, y: 1.778820495}, { x: 126252000, y: 1.127063985}, { x: 284018400, y: 0.884916516}, { x: 441784800, y: 0.630143123}, { x: 599637600, y: 0.540428714}, { x: 757404000, y: 0.384581749}, { x: 915170400, y: 0.35687828}, { x: 1072936800, y: 0.353354872}, { x: 1230789600, y: 0.328048478} ], 
+color: palette.color()
+},
+{
+name: "Perinatal_conditions, Female, Other ",
+data: [ { x: -31514400, y: 4.582392777}, { x: 126252000, y: 3.333972025}, { x: 284018400, y: 3.270339792}, { x: 441784800, y: 2.539967969}, { x: 599637600, y: 2.600131861}, { x: 757404000, y: 1.877274167}, { x: 915170400, y: 1.003038048}, { x: 1072936800, y: 0.970567348}, { x: 1230789600, y: 0.864741393} ], 
+color: palette.color()
+},
+{
+name: "Perinatal_conditions, Female, Black ",
+data: [ { x: -31514400, y: 4.540003252}, { x: 126252000, y: 3.436748759}, { x: 284018400, y: 2.688254162}, { x: 441784800, y: 1.98031006}, { x: 599637600, y: 1.721581549}, { x: 757404000, y: 1.071898702}, { x: 915170400, y: 1.607712432}, { x: 1072936800, y: 1.530785083}, { x: 1230789600, y: 1.44427494} ], 
+color: palette.color()
+},
+{
+name: "Nervous_System, All_Genders, All_Races ",
+data: [ { x: -31514400, y: 0.86779848}, { x: 126252000, y: 0.888521211}, { x: 284018400, y: 1.066947833}, { x: 441784800, y: 1.381919636}, { x: 599637600, y: 1.7844715}, { x: 757404000, y: 2.096492642}, { x: 915170400, y: 3.886488044}, { x: 1072936800, y: 4.132868031}, { x: 1230789600, y: 4.013502254} ], 
+color: palette.color()
+},
+{
+name: "Nervous_System, All_Genders, White ",
+data: [ { x: -31514400, y: 0.852032107}, { x: 126252000, y: 0.874353666}, { x: 284018400, y: 1.054095042}, { x: 441784800, y: 1.412456449}, { x: 599637600, y: 1.859112874}, { x: 757404000, y: 2.222809876}, { x: 915170400, y: 3.668358068}, { x: 1072936800, y: 3.901147302}, { x: 1230789600, y: 3.790604212} ], 
+color: palette.color()
+},
+{
+name: "Nervous_System, All_Genders, Other ",
+data: [ { x: -31514400, y: 1.05213935}, { x: 126252000, y: 1.043271251}, { x: 284018400, y: 1.139923583}, { x: 441784800, y: 1.163638213}, { x: 599637600, y: 1.320687788}, { x: 757404000, y: 1.312287656}, { x: 915170400, y: 4.935499494}, { x: 1072936800, y: 4.954613522}, { x: 1230789600, y: 5.208155935} ], 
+color: palette.color()
+},
+{
+name: "Nervous_System, All_Genders, Black ",
+data: [ { x: -31514400, y: 0.975006318}, { x: 126252000, y: 0.986564781}, { x: 284018400, y: 1.386127032}, { x: 441784800, y: 1.245949523}, { x: 599637600, y: 1.29463069}, { x: 757404000, y: 1.387317494}, { x: 915170400, y: 5.297163961}, { x: 1072936800, y: 5.647721902}, { x: 1230789600, y: 5.36838066} ], 
+color: palette.color()
+},
+{
+name: "Nervous_System, Male, All_Races ",
+data: [ { x: -31514400, y: 0.85611781}, { x: 126252000, y: 0.874971111}, { x: 284018400, y: 1.04874566}, { x: 441784800, y: 1.348943044}, { x: 599637600, y: 1.669552257}, { x: 757404000, y: 1.890848096}, { x: 915170400, y: 3.472930349}, { x: 1072936800, y: 3.939733701}, { x: 1230789600, y: 3.982119456} ], 
+color: palette.color()
+},
+{
+name: "Nervous_System, Male, White ",
+data: [ { x: -31514400, y: 0.828026825}, { x: 126252000, y: 0.857421892}, { x: 284018400, y: 1.026719039}, { x: 441784800, y: 1.379529134}, { x: 599637600, y: 1.741640253}, { x: 757404000, y: 2.015159881}, { x: 915170400, y: 3.10457565}, { x: 1072936800, y: 3.910620615}, { x: 1230789600, y: 4.689740525} ], 
+color: palette.color()
+},
+{
+name: "Nervous_System, Male, Other ",
+data: [ { x: -31514400, y: 0.999880967}, { x: 126252000, y: 0.959947037}, { x: 284018400, y: 1.183322622}, { x: 441784800, y: 1.149282956}, { x: 599637600, y: 1.257552483}, { x: 757404000, y: 1.167081382}, { x: 915170400, y: 1.846976386}, { x: 1072936800, y: 2.389980866}, { x: 1230789600, y: 3.040122548} ], 
+color: palette.color()
+},
+{
+name: "Nervous_System, Male, Black ",
+data: [ { x: -31514400, y: 1.055487829}, { x: 126252000, y: 0.99942097}, { x: 284018400, y: 1.364799545}, { x: 441784800, y: 1.132017745}, { x: 599637600, y: 1.185219614}, { x: 757404000, y: 1.308517171}, { x: 915170400, y: 1.721242365}, { x: 1072936800, y: 2.219320242}, { x: 1230789600, y: 2.764001038} ], 
+color: palette.color()
+},
+{
+name: "Nervous_System, Female, All_Races ",
+data: [ { x: -31514400, y: 0.882810345}, { x: 126252000, y: 0.905361519}, { x: 284018400, y: 1.088857235}, { x: 441784800, y: 1.418818671}, { x: 599637600, y: 1.908150439}, { x: 757404000, y: 2.310891467}, { x: 915170400, y: 4.286659081}, { x: 1072936800, y: 4.320369486}, { x: 1230789600, y: 4.044858386} ], 
+color: palette.color()
+},
+{
+name: "Nervous_System, Female, White ",
+data: [ { x: -31514400, y: 0.882772858}, { x: 126252000, y: 0.895214576}, { x: 284018400, y: 1.086650358}, { x: 441784800, y: 1.448798661}, { x: 599637600, y: 1.982936392}, { x: 757404000, y: 2.4344498}, { x: 915170400, y: 4.340252975}, { x: 1072936800, y: 5.940951363}, { x: 1230789600, y: 6.942088915} ], 
+color: palette.color()
+},
+{
+name: "Nervous_System, Female, Other ",
+data: [ { x: -31514400, y: 1.151241535}, { x: 126252000, y: 1.187967043}, { x: 284018400, y: 1.083889972}, { x: 441784800, y: 1.18101018}, { x: 599637600, y: 1.396901269}, { x: 757404000, y: 1.484050895}, { x: 915170400, y: 2.401504557}, { x: 1072936800, y: 3.187879744}, { x: 1230789600, y: 4.424865394} ], 
+color: palette.color()
+},
+{
+name: "Nervous_System, Female, Black ",
+data: [ { x: -31514400, y: 0.871005773}, { x: 126252000, y: 0.96984204}, { x: 284018400, y: 1.420497938}, { x: 441784800, y: 1.414507186}, { x: 599637600, y: 1.449752883}, { x: 757404000, y: 1.491882405}, { x: 915170400, y: 2.523742967}, { x: 1072936800, y: 3.71298309}, { x: 1230789600, y: 4.42621081} ], 
+color: palette.color()
+},
+{
+name: "Muscles_and_Skeleton, All_Genders, All_Races ",
+data: [ { x: -31514400, y: 0.25536033}, { x: 126252000, y: 0.260628069}, { x: 284018400, y: 0.271028018}, { x: 441784800, y: 0.304166275}, { x: 599637600, y: 0.353226465}, { x: 757404000, y: 0.383650092}, { x: 915170400, y: 0.596035892}, { x: 1072936800, y: 0.490785373}, { x: 1230789600, y: 0.538958944} ], 
+color: palette.color()
+},
+{
+name: "Muscles_and_Skeleton, All_Genders, White ",
+data: [ { x: -31514400, y: 0.252253772}, { x: 126252000, y: 0.257886368}, { x: 284018400, y: 0.260843252}, { x: 441784800, y: 0.293318404}, { x: 599637600, y: 0.341144358}, { x: 757404000, y: 0.37516445}, { x: 915170400, y: 0.419588347}, { x: 1072936800, y: 0.42486012}, { x: 1230789600, y: 0.377470869} ], 
+color: palette.color()
+},
+{
+name: "Muscles_and_Skeleton, All_Genders, Other ",
+data: [ { x: -31514400, y: 0.335125867}, { x: 126252000, y: 0.308080101}, { x: 284018400, y: 0.336363472}, { x: 441784800, y: 0.378415486}, { x: 599637600, y: 0.428280716}, { x: 757404000, y: 0.439198754}, { x: 915170400, y: 1.014837318}, { x: 1072936800, y: 1.040838587}, { x: 1230789600, y: 0.933566596} ], 
+color: palette.color()
+},
+{
+name: "Muscles_and_Skeleton, All_Genders, Black ",
+data: [ { x: -31514400, y: 0.27401269}, { x: 126252000, y: 0.278480332}, { x: 284018400, y: 0.426950521}, { x: 441784800, y: 0.387933002}, { x: 599637600, y: 0.432679204}, { x: 757404000, y: 0.409460697}, { x: 915170400, y: 1.805548742}, { x: 1072936800, y: 0.86187884}, { x: 1230789600, y: 1.626665736} ], 
+color: palette.color()
+},
+{
+name: "Muscles_and_Skeleton, Male, All_Races ",
+data: [ { x: -31514400, y: 0.152554384}, { x: 126252000, y: 0.154697204}, { x: 284018400, y: 0.158553533}, { x: 441784800, y: 0.166253429}, { x: 599637600, y: 0.200543321}, { x: 757404000, y: 0.211343715}, { x: 915170400, y: 0.683650381}, { x: 1072936800, y: 0.477933243}, { x: 1230789600, y: 0.608154984} ], 
+color: palette.color()
+},
+{
+name: "Muscles_and_Skeleton, Male, White ",
+data: [ { x: -31514400, y: 0.153060145}, { x: 126252000, y: 0.153103437}, { x: 284018400, y: 0.154616453}, { x: 441784800, y: 0.162894458}, { x: 599637600, y: 0.192489347}, { x: 757404000, y: 0.208148058}, { x: 915170400, y: 0.320882267}, { x: 1072936800, y: 0.343591527}, { x: 1230789600, y: 0.343663447} ], 
+color: palette.color()
+},
+{
+name: "Muscles_and_Skeleton, Male, Other ",
+data: [ { x: -31514400, y: 0.190453517}, { x: 126252000, y: 0.143440362}, { x: 284018400, y: 0.180751928}, { x: 441784800, y: 0.191160195}, { x: 599637600, y: 0.248506571}, { x: 757404000, y: 0.235114324}, { x: 915170400, y: 0.319980558}, { x: 1072936800, y: 0.337449991}, { x: 1230789600, y: 0.368231898} ], 
+color: palette.color()
+},
+{
+name: "Muscles_and_Skeleton, Male, Black ",
+data: [ { x: -31514400, y: 0.146289669}, { x: 126252000, y: 0.167363353}, { x: 284018400, y: 0.236944366}, { x: 441784800, y: 0.16062414}, { x: 599637600, y: 0.238205903}, { x: 757404000, y: 0.188955548}, { x: 915170400, y: 0.347538781}, { x: 1072936800, y: 0.397324312}, { x: 1230789600, y: 0.389392138} ], 
+color: palette.color()
+},
+{
+name: "Muscles_and_Skeleton, Female, All_Races ",
+data: [ { x: -31514400, y: 0.387485376}, { x: 126252000, y: 0.392280858}, { x: 284018400, y: 0.406410128}, { x: 441784800, y: 0.458483343}, { x: 599637600, y: 0.517547851}, { x: 757404000, y: 0.563291541}, { x: 915170400, y: 0.51125744}, { x: 1072936800, y: 0.503262664}, { x: 1230789600, y: 0.469821699} ], 
+color: palette.color()
+},
+{
+name: "Muscles_and_Skeleton, Female, White ",
+data: [ { x: -31514400, y: 0.379279423}, { x: 126252000, y: 0.386984907}, { x: 284018400, y: 0.387167276}, { x: 441784800, y: 0.437268633}, { x: 599637600, y: 0.497836073}, { x: 757404000, y: 0.545390009}, { x: 915170400, y: 0.772037849}, { x: 1072936800, y: 0.790692227}, { x: 1230789600, y: 0.728890752} ], 
+color: palette.color()
+},
+{
+name: "Muscles_and_Skeleton, Female, Other ",
+data: [ { x: -31514400, y: 0.609480813}, { x: 126252000, y: 0.593983522}, { x: 284018400, y: 0.537277517}, { x: 441784800, y: 0.605021869}, { x: 599637600, y: 0.645294215}, { x: 757404000, y: 0.680608453}, { x: 915170400, y: 0.983748855}, { x: 1072936800, y: 0.903495621}, { x: 1230789600, y: 0.884320444} ], 
+color: palette.color()
+},
+{
+name: "Muscles_and_Skeleton, Female, Black ",
+data: [ { x: -31514400, y: 0.439060086}, { x: 126252000, y: 0.423016209}, { x: 284018400, y: 0.733160226}, { x: 441784800, y: 0.724227679}, { x: 599637600, y: 0.708401977}, { x: 757404000, y: 0.702062308}, { x: 915170400, y: 0.848654267}, { x: 1072936800, y: 0.827146204}, { x: 1230789600, y: 0.826929383} ], 
+color: palette.color()
+},
+{
+name: "Mental_health, All_Genders, All_Races ",
+data: [ { x: -31514400, y: 0.351770821}, { x: 126252000, y: 0.498741012}, { x: 284018400, y: 0.666535892}, { x: 441784800, y: 0.822551393}, { x: 599637600, y: 1.183689369}, { x: 757404000, y: 1.638662605}, { x: 915170400, y: 3.465818229}, { x: 1072936800, y: 3.622532943}, { x: 1230789600, y: 3.671150614} ], 
+color: palette.color()
+},
+{
+name: "Mental_health, All_Genders, White ",
+data: [ { x: -31514400, y: 0.299532793}, { x: 126252000, y: 0.420492491}, { x: 284018400, y: 0.607462774}, { x: 441784800, y: 0.763614171}, { x: 599637600, y: 1.152479787}, { x: 757404000, y: 1.678329731}, { x: 915170400, y: 3.490416953}, { x: 1072936800, y: 3.645473678}, { x: 1230789600, y: 3.736118944} ], 
+color: palette.color()
+},
+{
+name: "Mental_health, All_Genders, Other ",
+data: [ { x: -31514400, y: 0.849505105}, { x: 126252000, y: 1.491387761}, { x: 284018400, y: 1.063868316}, { x: 441784800, y: 1.23482948}, { x: 599637600, y: 1.39461942}, { x: 757404000, y: 1.405365232}, { x: 915170400, y: 4.12098798}, { x: 1072936800, y: 4.178144238}, { x: 1230789600, y: 4.277685746} ], 
+color: palette.color()
+},
+{
+name: "Mental_health, All_Genders, Black ",
+data: [ { x: -31514400, y: 0.713408443}, { x: 126252000, y: 1.031408635}, { x: 284018400, y: 1.333489297}, { x: 441784800, y: 1.182054676}, { x: 599637600, y: 1.233306078}, { x: 757404000, y: 1.317278164}, { x: 915170400, y: 3.183624272}, { x: 1072936800, y: 3.351945529}, { x: 1230789600, y: 3.0611177} ], 
+color: palette.color()
+},
+{
+name: "Mental_health, Male, All_Races ",
+data: [ { x: -31514400, y: 0.442583489}, { x: 126252000, y: 0.607885457}, { x: 284018400, y: 0.718839694}, { x: 441784800, y: 0.815318682}, { x: 599637600, y: 1.102137367}, { x: 757404000, y: 1.370386299}, { x: 915170400, y: 3.534401148}, { x: 1072936800, y: 3.687481754}, { x: 1230789600, y: 3.844759748} ], 
+color: palette.color()
+},
+{
+name: "Mental_health, Male, White ",
+data: [ { x: -31514400, y: 0.370961941}, { x: 126252000, y: 0.500891326}, { x: 284018400, y: 0.630747401}, { x: 441784800, y: 0.71609472}, { x: 599637600, y: 1.017548647}, { x: 757404000, y: 1.352053872}, { x: 915170400, y: 1.429872034}, { x: 1072936800, y: 2.011997459}, { x: 1230789600, y: 3.114528177} ], 
+color: palette.color()
+},
+{
+name: "Mental_health, Male, Other ",
+data: [ { x: -31514400, y: 0.940364242}, { x: 126252000, y: 1.743352091}, { x: 284018400, y: 1.294987147}, { x: 441784800, y: 1.486715527}, { x: 599637600, y: 1.628264209}, { x: 757404000, y: 1.499506913}, { x: 915170400, y: 1.320426101}, { x: 1072936800, y: 1.722038615}, { x: 1230789600, y: 2.333117304} ], 
+color: palette.color()
+},
+{
+name: "Mental_health, Male, Black ",
+data: [ { x: -31514400, y: 0.942231311}, { x: 126252000, y: 1.322249808}, { x: 284018400, y: 1.535399488}, { x: 441784800, y: 1.284993116}, { x: 599637600, y: 1.307227516}, { x: 757404000, y: 1.294345505}, { x: 915170400, y: 1.40317926}, { x: 1072936800, y: 1.799073373}, { x: 1230789600, y: 2.406033529} ], 
+color: palette.color()
+},
+{
+name: "Mental_health, Female, All_Races ",
+data: [ { x: -31514400, y: 0.235059401}, { x: 126252000, y: 0.363094328}, { x: 284018400, y: 0.603579398}, { x: 441784800, y: 0.830644408}, { x: 599637600, y: 1.271457655}, { x: 757404000, y: 1.91835942}, { x: 915170400, y: 3.399455305}, { x: 1072936800, y: 3.559478401}, { x: 1230789600, y: 3.497688992} ], 
+color: palette.color()
+},
+{
+name: "Mental_health, Female, White ",
+data: [ { x: -31514400, y: 0.208061855}, { x: 126252000, y: 0.321436547}, { x: 284018400, y: 0.57977289}, { x: 441784800, y: 0.816061871}, { x: 599637600, y: 1.294705679}, { x: 757404000, y: 2.010874877}, { x: 915170400, y: 2.205416943}, { x: 1072936800, y: 3.301692314}, { x: 1230789600, y: 5.924309698} ], 
+color: palette.color()
+},
+{
+name: "Mental_health, Female, Other ",
+data: [ { x: -31514400, y: 0.677200903}, { x: 126252000, y: 1.053841732}, { x: 284018400, y: 0.76546488}, { x: 441784800, y: 0.930010396}, { x: 599637600, y: 1.112576232}, { x: 757404000, y: 1.294005856}, { x: 915170400, y: 1.142884699}, { x: 1072936800, y: 1.925353113}, { x: 1230789600, y: 3.680861478} ], 
+color: palette.color()
+},
+{
+name: "Mental_health, Female, Black ",
+data: [ { x: -31514400, y: 0.417716888}, { x: 126252000, y: 0.653095756}, { x: 284018400, y: 1.008095311}, { x: 441784800, y: 1.029761231}, { x: 599637600, y: 1.128500824}, { x: 757404000, y: 1.347708895}, { x: 915170400, y: 1.309536609}, { x: 1072936800, y: 2.107387855}, { x: 1230789600, y: 4.089736095} ], 
+color: palette.color()
+},
+{
+name: "Injury_and_poisoning, All_Genders, All_Races ",
+data: [ { x: -31514400, y: 8.323092212}, { x: 126252000, y: 8.150268839}, { x: 284018400, y: 8.339889481}, { x: 441784800, y: 7.139240779}, { x: 599637600, y: 7.045540121}, { x: 757404000, y: 6.649073211}, { x: 915170400, y: 0.154614424}, { x: 1072936800, y: 0.174613549}, { x: 1230789600, y: 0.164802579} ], 
+color: palette.color()
+},
+{
+name: "Injury_and_poisoning, All_Genders, White ",
+data: [ { x: -31514400, y: 7.782744583}, { x: 126252000, y: 7.557506541}, { x: 284018400, y: 7.817256041}, { x: 441784800, y: 6.738757762}, { x: 599637600, y: 6.491114304}, { x: 757404000, y: 6.068818703}, { x: 915170400, y: 0.130028302}, { x: 1072936800, y: 0.154909565}, { x: 1230789600, y: 0.150049937} ], 
+color: palette.color()
+},
+{
+name: "Injury_and_poisoning, All_Genders, Other ",
+data: [ { x: -31514400, y: 17.83181358}, { x: 126252000, y: 17.45553844}, { x: 284018400, y: 11.58394147}, { x: 441784800, y: 9.501915384}, { x: 599637600, y: 10.18800291}, { x: 757404000, y: 9.922848245}, { x: 915170400, y: 0.121076036}, { x: 1072936800, y: 0.138655229}, { x: 1230789600, y: 0.173398771} ], 
+color: palette.color()
+},
+{
+name: "Injury_and_poisoning, All_Genders, Black ",
+data: [ { x: -31514400, y: 11.81579962}, { x: 126252000, y: 12.07106854}, { x: 284018400, y: 17.74476547}, { x: 441784800, y: 14.30788189}, { x: 599637600, y: 13.44371763}, { x: 757404000, y: 12.40773665}, { x: 915170400, y: 0.337773916}, { x: 1072936800, y: 0.323467119}, { x: 1230789600, y: 0.270355125} ], 
+color: palette.color()
+},
+{
+name: "Injury_and_poisoning, Male, All_Races ",
+data: [ { x: -31514400, y: 10.43327665}, { x: 126252000, y: 10.50943839}, { x: 284018400, y: 11.04755173}, { x: 441784800, y: 9.694438623}, { x: 599637600, y: 9.702033289}, { x: 757404000, y: 9.315433499}, { x: 915170400, y: 0.110375745}, { x: 1072936800, y: 0.130483899}, { x: 1230789600, y: 0.135227558} ], 
+color: palette.color()
+},
+{
+name: "Injury_and_poisoning, Male, White ",
+data: [ { x: -31514400, y: 9.619729633}, { x: 126252000, y: 9.64604959}, { x: 284018400, y: 10.29942956}, { x: 441784800, y: 9.11920563}, { x: 599637600, y: 8.901845127}, { x: 757404000, y: 8.461289206}, { x: 915170400, y: 8.352271543}, { x: 1072936800, y: 9.440690077}, { x: 1230789600, y: 9.756442607} ], 
+color: palette.color()
+},
+{
+name: "Injury_and_poisoning, Male, Other ",
+data: [ { x: -31514400, y: 20.58088323}, { x: 126252000, y: 19.73960057}, { x: 284018400, y: 15.68605398}, { x: 441784800, y: 13.10492141}, { x: 599637600, y: 14.14780679}, { x: 757404000, y: 14.00562968}, { x: 915170400, y: 12.73441614}, { x: 1072936800, y: 12.73960689}, { x: 1230789600, y: 11.96311789} ], 
+color: palette.color()
+},
+{
+name: "Injury_and_poisoning, Male, Black ",
+data: [ { x: -31514400, y: 15.81186834}, { x: 126252000, y: 16.26914565}, { x: 284018400, y: 20.98379301}, { x: 441784800, y: 17.17913416}, { x: 599637600, y: 16.16314199}, { x: 757404000, y: 15.36208607}, { x: 915170400, y: 12.00139838}, { x: 1072936800, y: 12.42680411}, { x: 1230789600, y: 11.7972155} ], 
+color: palette.color()
+},
+{
+name: "Injury_and_poisoning, Female, All_Races ",
+data: [ { x: -31514400, y: 5.611106884}, { x: 126252000, y: 5.218250383}, { x: 284018400, y: 5.080758923}, { x: 441784800, y: 4.280111638}, { x: 599637600, y: 4.186556287}, { x: 757404000, y: 3.869206103}, { x: 915170400, y: 0.19742112}, { x: 1072936800, y: 0.217456133}, { x: 1230789600, y: 0.194352471} ], 
+color: palette.color()
+},
+{
+name: "Injury_and_poisoning, Female, White ",
+data: [ { x: -31514400, y: 5.430333143}, { x: 126252000, y: 4.984302547}, { x: 284018400, y: 4.865475998}, { x: 441784800, y: 4.111433355}, { x: 599637600, y: 3.95005266}, { x: 757404000, y: 3.630377637}, { x: 915170400, y: 3.728299445}, { x: 1072936800, y: 4.389655872}, { x: 1230789600, y: 4.764468243} ], 
+color: palette.color()
+},
+{
+name: "Injury_and_poisoning, Female, Other ",
+data: [ { x: -31514400, y: 12.61851016}, { x: 126252000, y: 13.48917417}, { x: 284018400, y: 6.287599054}, { x: 441784800, y: 5.141749319}, { x: 599637600, y: 5.407944618}, { x: 757404000, y: 5.093361557}, { x: 915170400, y: 7.604764431}, { x: 1072936800, y: 7.366053815}, { x: 1230789600, y: 6.660140317} ], 
+color: palette.color()
+},
+{
+name: "Injury_and_poisoning, Female, Black ",
+data: [ { x: -31514400, y: 6.651963574}, { x: 126252000, y: 6.610402072}, { x: 284018400, y: 12.52482053}, { x: 441784800, y: 10.0599751}, { x: 599637600, y: 9.588138386}, { x: 757404000, y: 8.487431831}, { x: 915170400, y: 4.385191556}, { x: 1072936800, y: 4.398272309}, { x: 1230789600, y: 4.29290409} ], 
+color: palette.color()
+},
+{
+name: "Infection, All_Genders, All_Races ",
+data: [ { x: -31514400, y: 0.539961186}, { x: 126252000, y: 0.405685379}, { x: 284018400, y: 0.214839919}, { x: 441784800, y: 0.278264157}, { x: 599637600, y: 0.31552669}, { x: 757404000, y: 0.287562306}, { x: 915170400, y: 0.379500541}, { x: 1072936800, y: 0.395621197}, { x: 1230789600, y: 0.396165563} ], 
+color: palette.color()
+},
+{
+name: "Infection, All_Genders, White ",
+data: [ { x: -31514400, y: 0.445765142}, { x: 126252000, y: 0.343632702}, { x: 284018400, y: 0.176734855}, { x: 441784800, y: 0.22679778}, { x: 599637600, y: 0.257285538}, { x: 757404000, y: 0.238203695}, { x: 915170400, y: 0.330157555}, { x: 1072936800, y: 0.342694921}, { x: 1230789600, y: 0.34582345} ], 
+color: palette.color()
+},
+{
+name: "Infection, All_Genders, Other ",
+data: [ { x: -31514400, y: 1.745771959}, { x: 126252000, y: 1.17630584}, { x: 284018400, y: 0.469912899}, { x: 441784800, y: 0.632246254}, { x: 599637600, y: 0.681440547}, { x: 757404000, y: 0.587131937}, { x: 915170400, y: 0.420464051}, { x: 1072936800, y: 0.349411177}, { x: 1230789600, y: 0.376213404} ], 
+color: palette.color()
+},
+{
+name: "Infection, All_Genders, Black ",
+data: [ { x: -31514400, y: 1.174530121}, { x: 126252000, y: 0.829162855}, { x: 284018400, y: 0.660896011}, { x: 441784800, y: 0.657204144}, { x: 599637600, y: 0.660943036}, { x: 757404000, y: 0.616884866}, { x: 915170400, y: 0.729857953}, { x: 1072936800, y: 0.785913077}, { x: 1230789600, y: 0.767459708} ], 
+color: palette.color()
+},
+{
+name: "Infection, Male, All_Races ",
+data: [ { x: -31514400, y: 0.575432546}, { x: 126252000, y: 0.414513953}, { x: 284018400, y: 0.24193741}, { x: 441784800, y: 0.336401248}, { x: 599637600, y: 0.358183448}, { x: 757404000, y: 0.314096935}, { x: 915170400, y: 0.32586316}, { x: 1072936800, y: 0.347618584}, { x: 1230789600, y: 0.347950593} ], 
+color: palette.color()
+},
+{
+name: "Infection, Male, White ",
+data: [ { x: -31514400, y: 0.47684529}, { x: 126252000, y: 0.349280542}, { x: 284018400, y: 0.20242693}, { x: 441784800, y: 0.276546723}, { x: 599637600, y: 0.289258801}, { x: 757404000, y: 0.259730821}, { x: 915170400, y: 2.21956806}, { x: 1072936800, y: 2.446863228}, { x: 1230789600, y: 2.590034819} ], 
+color: palette.color()
+},
+{
+name: "Infection, Male, Other ",
+data: [ { x: -31514400, y: 1.47601476}, { x: 126252000, y: 1.059251903}, { x: 284018400, y: 0.500482005}, { x: 441784800, y: 0.734457593}, { x: 599637600, y: 0.761222052}, { x: 757404000, y: 0.628277722}, { x: 915170400, y: 3.211956742}, { x: 1072936800, y: 3.075317447}, { x: 1230789600, y: 2.984151299} ], 
+color: palette.color()
+},
+{
+name: "Infection, Male, Black ",
+data: [ { x: -31514400, y: 1.248967714}, { x: 126252000, y: 0.853473781}, { x: 284018400, y: 0.606577576}, { x: 441784800, y: 0.688389169}, { x: 599637600, y: 0.743667209}, { x: 757404000, y: 0.585762199}, { x: 915170400, y: 6.445576249}, { x: 1072936800, y: 6.123101075}, { x: 1230789600, y: 5.402303562} ], 
+color: palette.color()
+},
+{
+name: "Infection, Female, All_Races ",
+data: [ { x: -31514400, y: 0.494373793}, { x: 126252000, y: 0.394713069}, { x: 284018400, y: 0.182223495}, { x: 441784800, y: 0.213211874}, { x: 599637600, y: 0.269618428}, { x: 757404000, y: 0.259898099}, { x: 915170400, y: 0.431401706}, { x: 1072936800, y: 0.442223787}, { x: 1230789600, y: 0.444339566} ], 
+color: palette.color()
+},
+{
+name: "Infection, Female, White ",
+data: [ { x: -31514400, y: 0.40596444}, { x: 126252000, y: 0.336674242}, { x: 284018400, y: 0.146182053}, { x: 441784800, y: 0.171889368}, { x: 599637600, y: 0.223583712}, { x: 757404000, y: 0.216262931}, { x: 915170400, y: 1.916091975}, { x: 1072936800, y: 2.17516537}, { x: 1230789600, y: 2.515578253} ], 
+color: palette.color()
+},
+{
+name: "Infection, Female, Other ",
+data: [ { x: -31514400, y: 2.257336343}, { x: 126252000, y: 1.379574631}, { x: 284018400, y: 0.430444343}, { x: 441784800, y: 0.508555534}, { x: 599637600, y: 0.585132685}, { x: 757404000, y: 0.538460944}, { x: 915170400, y: 2.859622896}, { x: 1072936800, y: 2.805176359}, { x: 1230789600, y: 2.949910263} ], 
+color: palette.color()
+},
+{
+name: "Infection, Female, Black ",
+data: [ { x: -31514400, y: 1.078339702}, { x: 126252000, y: 0.797540316}, { x: 284018400, y: 0.748434397}, { x: 441784800, y: 0.611067104}, { x: 599637600, y: 0.543657331}, { x: 757404000, y: 0.658183414}, { x: 915170400, y: 4.803784539}, { x: 1072936800, y: 4.802670581}, { x: 1230789600, y: 4.676428235} ], 
+color: palette.color()
+},
+{
+name: "Ill-defined_conditions, All_Genders, All_Races ",
+data: [ { x: -31514400, y: 1.385022815}, { x: 126252000, y: 1.633379396}, { x: 284018400, y: 1.456873417}, { x: 441784800, y: 1.483079894}, { x: 599637600, y: 1.286992324}, { x: 757404000, y: 1.139514382}, { x: 915170400, y: 0.004926952}, { x: 1072936800, y: 0.004335118}, { x: 1230789600, y: 0.004180518} ], 
+color: palette.color()
+},
+{
+name: "Ill-defined_conditions, All_Genders, White ",
+data: [ { x: -31514400, y: 1.057125649}, { x: 126252000, y: 1.322094306}, { x: 284018400, y: 1.203726979}, { x: 441784800, y: 1.304857799}, { x: 599637600, y: 1.143431436}, { x: 757404000, y: 1.043051942}, { x: 915170400, y: 0.004263223}, { x: 1072936800, y: 0.004127684}, { x: 1230789600, y: 0.004117516} ], 
+color: palette.color()
+},
+{
+name: "Ill-defined_conditions, All_Genders, Other ",
+data: [ { x: -31514400, y: 2.766736809}, { x: 126252000, y: 2.870746394}, { x: 284018400, y: 3.29120113}, { x: 441784800, y: 2.786205844}, { x: 599637600, y: 2.204880234}, { x: 757404000, y: 1.767412231}, { x: 915170400, y: 0.013208295}, { x: 1072936800, y: 0.003697473}, { x: 1230789600, y: 0.003096407} ], 
+color: palette.color()
+},
+{
+name: "Ill-defined_conditions, All_Genders, Black ",
+data: [ { x: -31514400, y: 3.754151204}, { x: 126252000, y: 3.926079392}, { x: 284018400, y: 2.614340859}, { x: 441784800, y: 1.962484597}, { x: 599637600, y: 1.993049877}, { x: 757404000, y: 1.460050644}, { x: 915170400, y: 0.008409309}, { x: 1072936800, y: 0.005951235}, { x: 1230789600, y: 0.004883835} ], 
+color: palette.color()
+},
+{
+name: "Ill-defined_conditions, Male, All_Races ",
+data: [ { x: -31514400, y: 1.478454584}, { x: 126252000, y: 1.739132055}, { x: 284018400, y: 1.545228351}, { x: 441784800, y: 1.576486777}, { x: 599637600, y: 1.397175196}, { x: 757404000, y: 1.169171974}, { x: 915170400, y: 0.004839552}, { x: 1072936800, y: 0.003892516}, { x: 1230789600, y: 0.003444243} ], 
+color: palette.color()
+},
+{
+name: "Ill-defined_conditions, Male, White ",
+data: [ { x: -31514400, y: 1.156360405}, { x: 126252000, y: 1.417912676}, { x: 284018400, y: 1.288031809}, { x: 441784800, y: 1.38070411}, { x: 599637600, y: 1.228405298}, { x: 757404000, y: 1.049017757}, { x: 915170400, y: 1.007324098}, { x: 1072936800, y: 1.102921866}, { x: 1230789600, y: 1.410165355} ], 
+color: palette.color()
+},
+{
+name: "Ill-defined_conditions, Male, Other ",
+data: [ { x: -31514400, y: 2.60683252}, { x: 126252000, y: 2.659163632}, { x: 284018400, y: 3.356362468}, { x: 441784800, y: 2.957178568}, { x: 599637600, y: 2.409967571}, { x: 757404000, y: 1.888098644}, { x: 915170400, y: 1.089554052}, { x: 1072936800, y: 1.127152548}, { x: 1230789600, y: 1.119424969} ], 
+color: palette.color()
+},
+{
+name: "Ill-defined_conditions, Male, Black ",
+data: [ { x: -31514400, y: 3.79881238}, { x: 126252000, y: 4.062725564}, { x: 284018400, y: 2.407354753}, { x: 441784800, y: 1.95043598}, { x: 599637600, y: 2.120613525}, { x: 757404000, y: 1.591950494}, { x: 915170400, y: 1.726726212}, { x: 1072936800, y: 1.614303675}, { x: 1230789600, y: 1.832875627} ], 
+color: palette.color()
+},
+{
+name: "Ill-defined_conditions, Female, All_Races ",
+data: [ { x: -31514400, y: 1.264945355}, { x: 126252000, y: 1.501948085}, { x: 284018400, y: 1.350523275}, { x: 441784800, y: 1.37856261}, { x: 599637600, y: 1.168410784}, { x: 757404000, y: 1.108594268}, { x: 915170400, y: 0.005011522}, { x: 1072936800, y: 0.004764811}, { x: 1230789600, y: 0.004916167} ], 
+color: palette.color()
+},
+{
+name: "Ill-defined_conditions, Female, White ",
+data: [ { x: -31514400, y: 0.930047329}, { x: 126252000, y: 1.204040616}, { x: 284018400, y: 1.103472378}, { x: 441784800, y: 1.221145458}, { x: 599637600, y: 1.05386365}, { x: 757404000, y: 1.036971496}, { x: 915170400, y: 1.088895049}, { x: 1072936800, y: 1.331150931}, { x: 1230789600, y: 1.807934905} ], 
+color: palette.color()
+},
+{
+name: "Ill-defined_conditions, Female, Other ",
+data: [ { x: -31514400, y: 3.069977427}, { x: 126252000, y: 3.238168231}, { x: 284018400, y: 3.207069659}, { x: 441784800, y: 2.579303757}, { x: 599637600, y: 1.957310038}, { x: 757404000, y: 1.624653322}, { x: 915170400, y: 1.089839417}, { x: 1072936800, y: 1.148110155}, { x: 1230789600, y: 1.282427802} ], 
+color: palette.color()
+},
+{
+name: "Ill-defined_conditions, Female, Black ",
+data: [ { x: -31514400, y: 3.696438735}, { x: 126252000, y: 3.748336308}, { x: 284018400, y: 2.947915076}, { x: 441784800, y: 1.98031006}, { x: 599637600, y: 1.812191104}, { x: 757404000, y: 1.28502476}, { x: 915170400, y: 1.486578504}, { x: 1072936800, y: 1.542077181}, { x: 1230789600, y: 1.842769358} ], 
+color: palette.color()
+},
+{
+name: "Genitourinary_system, All_Genders, All_Races ",
+data: [ { x: -31514400, y: 1.523629155}, { x: 126252000, y: 1.347499272}, { x: 284018400, y: 1.434179059}, { x: 441784800, y: 1.704594419}, { x: 599637600, y: 1.82639625}, { x: 757404000, y: 1.852526938}, { x: 915170400, y: 1.759882087}, { x: 1072936800, y: 2.565055948}, { x: 1230789600, y: 4.332984001} ], 
+color: palette.color()
+},
+{
+name: "Genitourinary_system, All_Genders, White ",
+data: [ { x: -31514400, y: 1.402511965}, { x: 126252000, y: 1.236936484}, { x: 284018400, y: 1.342398614}, { x: 441784800, y: 1.599801391}, { x: 599637600, y: 1.701197614}, { x: 757404000, y: 1.760261611}, { x: 915170400, y: 1.826984845}, { x: 1072936800, y: 2.669737664}, { x: 1230789600, y: 4.526442591} ], 
+color: palette.color()
+},
+{
+name: "Genitourinary_system, All_Genders, Other ",
+data: [ { x: -31514400, y: 1.87826358}, { x: 126252000, y: 1.512393222}, { x: 284018400, y: 2.117777013}, { x: 441784800, y: 2.492541867}, { x: 599637600, y: 2.683942274}, { x: 757404000, y: 2.511678935}, { x: 915170400, y: 1.23937833}, { x: 1072936800, y: 1.81730787}, { x: 1230789600, y: 2.972550355} ], 
+color: palette.color()
+},
+{
+name: "Genitourinary_system, All_Genders, Black ",
+data: [ { x: -31514400, y: 2.407587225}, { x: 126252000, y: 2.17941129}, { x: 284018400, y: 1.614223886}, { x: 441784800, y: 1.752544384}, { x: 599637600, y: 1.921504497}, { x: 757404000, y: 1.713269759}, { x: 915170400, y: 1.357402645}, { x: 1072936800, y: 1.952005041}, { x: 1230789600, y: 3.229958836} ], 
+color: palette.color()
+},
+{
+name: "Genitourinary_system, Male, All_Races ",
+data: [ { x: -31514400, y: 1.524526193}, { x: 126252000, y: 1.30635265}, { x: 284018400, y: 1.349424288}, { x: 441784800, y: 1.526694199}, { x: 599637600, y: 1.576938682}, { x: 757404000, y: 1.569712094}, { x: 915170400, y: 1.424271626}, { x: 1072936800, y: 1.979005801}, { x: 1230789600, y: 3.007726586} ], 
+color: palette.color()
+},
+{
+name: "Genitourinary_system, Male, White ",
+data: [ { x: -31514400, y: 1.415727009}, { x: 126252000, y: 1.212886277}, { x: 284018400, y: 1.265442455}, { x: 441784800, y: 1.438705219}, { x: 599637600, y: 1.463191923}, { x: 757404000, y: 1.503672874}, { x: 915170400, y: 1.861553995}, { x: 1072936800, y: 2.168085332}, { x: 1230789600, y: 2.311716508} ], 
+color: palette.color()
+},
+{
+name: "Genitourinary_system, Male, Other ",
+data: [ { x: -31514400, y: 1.702178312}, { x: 126252000, y: 1.313031005}, { x: 284018400, y: 1.949710797}, { x: 441784800, y: 2.164676382}, { x: 599637600, y: 2.297320362}, { x: 757404000, y: 2.020676999}, { x: 915170400, y: 1.968487991}, { x: 1072936800, y: 2.160375718}, { x: 1230789600, y: 2.209391386} ], 
+color: palette.color()
+},
+{
+name: "Genitourinary_system, Male, Black ",
+data: [ { x: -31514400, y: 2.321758622}, { x: 126252000, y: 2.001221515}, { x: 284018400, y: 1.525921714}, { x: 441784800, y: 1.522104941}, { x: 599637600, y: 1.742970021}, { x: 757404000, y: 1.398271057}, { x: 915170400, y: 2.637730236}, { x: 1072936800, y: 3.001465654}, { x: 1230789600, y: 3.14724488} ], 
+color: palette.color()
+},
+{
+name: "Genitourinary_system, Female, All_Races ",
+data: [ { x: -31514400, y: 1.522476292}, { x: 126252000, y: 1.398637035}, { x: 284018400, y: 1.536195794}, { x: 441784800, y: 1.903655209}, { x: 599637600, y: 2.094868671}, { x: 757404000, y: 2.147381196}, { x: 915170400, y: 2.084629004}, { x: 1072936800, y: 3.134013606}, { x: 1230789600, y: 5.657115373} ], 
+color: palette.color()
+},
+{
+name: "Genitourinary_system, Female, White ",
+data: [ { x: -31514400, y: 1.385589007}, { x: 126252000, y: 1.266567709}, { x: 284018400, y: 1.433914236}, { x: 441784800, y: 1.777604867}, { x: 599637600, y: 1.952070556}, { x: 757404000, y: 2.02178062}, { x: 915170400, y: 2.324723282}, { x: 1072936800, y: 2.600029137}, { x: 1230789600, y: 2.612858967} ], 
+color: palette.color()
+},
+{
+name: "Genitourinary_system, Female, Other ",
+data: [ { x: -31514400, y: 2.212189616}, { x: 126252000, y: 1.8585936}, { x: 284018400, y: 2.334771605}, { x: 441784800, y: 2.889307222}, { x: 599637600, y: 3.150651063}, { x: 757404000, y: 3.09248086}, { x: 915170400, y: 2.637797174}, { x: 1072936800, y: 2.603961177}, { x: 1230789600, y: 3.119595366} ], 
+color: palette.color()
+},
+{
+name: "Genitourinary_system, Female, Black ",
+data: [ { x: -31514400, y: 2.518497439}, { x: 126252000, y: 2.41119239}, { x: 284018400, y: 1.756529708}, { x: 441784800, y: 2.093470635}, { x: 599637600, y: 2.174629325}, { x: 757404000, y: 2.131260578}, { x: 915170400, y: 3.555890048}, { x: 1072936800, y: 3.942353838}, { x: 1230789600, y: 4.148904319} ], 
+color: palette.color()
+},
+{
+name: "Endocr_Nutr_Metab_Immunity, All_Genders, All_Races ",
+data: [ { x: -31514400, y: 2.422957456}, { x: 126252000, y: 2.363055364}, { x: 284018400, y: 2.289730255}, { x: 441784800, y: 2.434407414}, { x: 599637600, y: 2.917832597}, { x: 757404000, y: 3.343530703}, { x: 915170400, y: 39.90651318}, { x: 1072936800, y: 36.15063201}, { x: 1230789600, y: 32.21646559} ], 
+color: palette.color()
+},
+{
+name: "Endocr_Nutr_Metab_Immunity, All_Genders, White ",
+data: [ { x: -31514400, y: 2.344172267}, { x: 126252000, y: 2.270365196}, { x: 284018400, y: 2.174785827}, { x: 441784800, y: 2.293028112}, { x: 599637600, y: 2.763786347}, { x: 757404000, y: 3.166198412}, { x: 915170400, y: 40.40149872}, { x: 1072936800, y: 36.30478044}, { x: 1230789600, y: 32.17532191} ], 
+color: palette.color()
+},
+{
+name: "Endocr_Nutr_Metab_Immunity, All_Genders, Other ",
+data: [ { x: -31514400, y: 3.000545554}, { x: 126252000, y: 2.849740933}, { x: 284018400, y: 3.110569871}, { x: 441784800, y: 3.448962642}, { x: 599637600, y: 3.929578254}, { x: 757404000, y: 4.50346829}, { x: 915170400, y: 36.14009598}, { x: 1072936800, y: 33.66179217}, { x: 1230789600, y: 31.00741589} ], 
+color: palette.color()
+},
+{
+name: "Endocr_Nutr_Metab_Immunity, All_Genders, Black ",
+data: [ { x: -31514400, y: 2.978225302}, { x: 126252000, y: 3.038171088}, { x: 284018400, y: 2.971107732}, { x: 441784800, y: 3.021313496}, { x: 599637600, y: 3.430771327}, { x: 757404000, y: 3.889876623}, { x: 915170400, y: 36.92597706}, { x: 1072936800, y: 35.51066846}, { x: 1230789600, y: 32.7886695} ], 
+color: palette.color()
+},
+{
+name: "Endocr_Nutr_Metab_Immunity, Male, All_Races ",
+data: [ { x: -31514400, y: 1.790039281}, { x: 126252000, y: 1.772401273}, { x: 284018400, y: 1.767012269}, { x: 441784800, y: 1.990312237}, { x: 599637600, y: 2.384844335}, { x: 757404000, y: 2.840778864}, { x: 915170400, y: 37.73508972}, { x: 1072936800, y: 34.64533681}, { x: 1230789600, y: 31.61840079} ], 
+color: palette.color()
+},
+{
+name: "Endocr_Nutr_Metab_Immunity, Male, White ",
+data: [ { x: -31514400, y: 1.766591212}, { x: 126252000, y: 1.744270349}, { x: 284018400, y: 1.706921773}, { x: 441784800, y: 1.896946023}, { x: 599637600, y: 2.30231533}, { x: 757404000, y: 2.752056497}, { x: 915170400, y: 3.350300777}, { x: 1072936800, y: 3.797840933}, { x: 1230789600, y: 3.829282705} ], 
+color: palette.color()
+},
+{
+name: "Endocr_Nutr_Metab_Immunity, Male, Other ",
+data: [ { x: -31514400, y: 2.475895727}, { x: 126252000, y: 2.394350657}, { x: 284018400, y: 2.152956298}, { x: 441784800, y: 2.615876357}, { x: 599637600, y: 2.876941458}, { x: 757404000, y: 3.372584364}, { x: 915170400, y: 4.220503058}, { x: 1072936800, y: 4.501652461}, { x: 1230789600, y: 5.01973723} ], 
+color: palette.color()
+},
+{
+name: "Endocr_Nutr_Metab_Immunity, Male, Black ",
+data: [ { x: -31514400, y: 1.91906878}, { x: 126252000, y: 1.936973024}, { x: 284018400, y: 2.407354753}, { x: 441784800, y: 2.493498547}, { x: 599637600, y: 2.765512433}, { x: 757404000, y: 3.146109878}, { x: 915170400, y: 4.19308624}, { x: 1072936800, y: 4.822072338}, { x: 1230789600, y: 4.826413084} ], 
+color: palette.color()
+},
+{
+name: "Endocr_Nutr_Metab_Immunity, Female, All_Races ",
+data: [ { x: -31514400, y: 3.23637678}, { x: 126252000, y: 3.097130918}, { x: 284018400, y: 2.91890997}, { x: 441784800, y: 2.931326064}, { x: 599637600, y: 3.491447784}, { x: 757404000, y: 3.867684661}, { x: 915170400, y: 42.00764873}, { x: 1072936800, y: 37.61202441}, { x: 1230789600, y: 32.81402222} ], 
+color: palette.color()
+},
+{
+name: "Endocr_Nutr_Metab_Immunity, Female, White ",
+data: [ { x: -31514400, y: 3.083812625}, { x: 126252000, y: 2.918544012}, { x: 284018400, y: 2.731165857}, { x: 441784800, y: 2.730187923}, { x: 599637600, y: 3.250205772}, { x: 757404000, y: 3.588297933}, { x: 915170400, y: 3.971453522}, { x: 1072936800, y: 4.000403725}, { x: 1230789600, y: 3.752310536} ], 
+color: palette.color()
+},
+{
+name: "Endocr_Nutr_Metab_Immunity, Female, Other ",
+data: [ { x: -31514400, y: 3.995485327}, { x: 126252000, y: 3.640544166}, { x: 284018400, y: 4.346969257}, { x: 441784800, y: 4.457119309}, { x: 599637600, y: 5.200263722}, { x: 757404000, y: 5.84118106}, { x: 915170400, y: 5.786757969}, { x: 1072936800, y: 5.468318472}, { x: 1230789600, y: 5.416870615} ], 
+color: palette.color()
+},
+{
+name: "Endocr_Nutr_Metab_Immunity, Female, Black ",
+data: [ { x: -31514400, y: 4.346898122}, { x: 126252000, y: 4.470559104}, { x: 284018400, y: 3.87963953}, { x: 441784800, y: 3.802195315}, { x: 599637600, y: 4.373970346}, { x: 757404000, y: 4.876825675}, { x: 915170400, y: 6.451636025}, { x: 1072936800, y: 6.486604748}, { x: 1230789600, y: 5.933931194} ], 
+color: palette.color()
+},
+{
+name: "Digestive_System, All_Genders, All_Races ",
+data: [ { x: -31514400, y: 3.850592355}, { x: 126252000, y: 3.789512496}, { x: 284018400, y: 3.788496934}, { x: 441784800, y: 3.639712795}, { x: 599637600, y: 3.554875226}, { x: 757404000, y: 3.409035144}, { x: 915170400, y: 6.34152961}, { x: 1072936800, y: 7.128476223}, { x: 1230789600, y: 7.409230502} ], 
+color: palette.color()
+},
+{
+name: "Digestive_System, All_Genders, White ",
+data: [ { x: -31514400, y: 3.820513156}, { x: 126252000, y: 3.703865}, { x: 284018400, y: 3.708632309}, { x: 441784800, y: 3.600351713}, { x: 599637600, y: 3.530310897}, { x: 757404000, y: 3.422948875}, { x: 915170400, y: 5.9845962}, { x: 1072936800, y: 6.864678968}, { x: 1230789600, y: 7.247976911} ], 
+color: palette.color()
+},
+{
+name: "Digestive_System, All_Genders, Other ",
+data: [ { x: -31514400, y: 6.133582729}, { x: 126252000, y: 6.077580171}, { x: 284018400, y: 4.252304294}, { x: 441784800, y: 3.824411825}, { x: 599637600, y: 3.623023356}, { x: 757404000, y: 3.214892412}, { x: 915170400, y: 10.39272663}, { x: 1072936800, y: 10.22166349}, { x: 1230789600, y: 9.447136598} ], 
+color: palette.color()
+},
+{
+name: "Digestive_System, All_Genders, Black ",
+data: [ { x: -31514400, y: 3.945250668}, { x: 126252000, y: 4.295592746}, { x: 284018400, y: 5.638086326}, { x: 441784800, y: 4.856008398}, { x: 599637600, y: 4.486917416}, { x: 757404000, y: 4.1511772}, { x: 915170400, y: 8.278264038}, { x: 1072936800, y: 8.444452224}, { x: 1230789600, y: 8.124956394} ], 
+color: palette.color()
+},
+{
+name: "Digestive_System, Male, All_Races ",
+data: [ { x: -31514400, y: 3.985286689}, { x: 126252000, y: 3.969381137}, { x: 284018400, y: 3.815504816}, { x: 441784800, y: 3.638288916}, { x: 599637600, y: 3.538125175}, { x: 757404000, y: 3.390598724}, { x: 915170400, y: 8.896115198}, { x: 1072936800, y: 9.884705375}, { x: 1230789600, y: 10.06284924} ], 
+color: palette.color()
+},
+{
+name: "Digestive_System, Male, White ",
+data: [ { x: -31514400, y: 3.957138928}, { x: 126252000, y: 3.875670627}, { x: 284018400, y: 3.713316973}, { x: 441784800, y: 3.580046337}, { x: 599637600, y: 3.504376666}, { x: 757404000, y: 3.398910402}, { x: 915170400, y: 3.555022076}, { x: 1072936800, y: 3.702800762}, { x: 1230789600, y: 3.92330656} ], 
+color: palette.color()
+},
+{
+name: "Digestive_System, Male, Other ",
+data: [ { x: -31514400, y: 5.570765385}, { x: 126252000, y: 5.527970871}, { x: 284018400, y: 4.423200514}, { x: 441784800, y: 3.931553815}, { x: 599637600, y: 3.65796211}, { x: 757404000, y: 3.249802439}, { x: 915170400, y: 4.224553445}, { x: 1072936800, y: 4.136371543}, { x: 1230789600, y: 4.189006068} ], 
+color: palette.color()
+},
+{
+name: "Digestive_System, Male, Black ",
+data: [ { x: -31514400, y: 4.089818711}, { x: 126252000, y: 4.554504136}, { x: 284018400, y: 5.47815373}, { x: 441784800, y: 4.910509408}, { x: 599637600, y: 4.386474553}, { x: 757404000, y: 4.020029288}, { x: 915170400, y: 3.275227408}, { x: 1072936800, y: 3.490480193}, { x: 1230789600, y: 3.207361561} ], 
+color: palette.color()
+},
+{
+name: "Digestive_System, Female, All_Races ",
+data: [ { x: -31514400, y: 3.67748471}, { x: 126252000, y: 3.565968506}, { x: 284018400, y: 3.75598837}, { x: 441784800, y: 3.641306039}, { x: 599637600, y: 3.572902047}, { x: 757404000, y: 3.428256401}, { x: 915170400, y: 3.869634693}, { x: 1072936800, y: 4.452634078}, { x: 1230789600, y: 4.757866482} ], 
+color: palette.color()
+},
+{
+name: "Digestive_System, Female, White ",
+data: [ { x: -31514400, y: 3.645552542}, { x: 126252000, y: 3.492190681}, { x: 284018400, y: 3.703061347}, { x: 441784800, y: 3.622762962}, { x: 599637600, y: 3.557647205}, { x: 757404000, y: 3.447449239}, { x: 915170400, y: 3.428850941}, { x: 1072936800, y: 3.590394004}, { x: 1230789600, y: 3.550793681} ], 
+color: palette.color()
+},
+{
+name: "Digestive_System, Female, Other ",
+data: [ { x: -31514400, y: 7.200902935}, { x: 126252000, y: 7.031998467}, { x: 284018400, y: 4.03165581}, { x: 441784800, y: 3.694754292}, { x: 599637600, y: 3.580847206}, { x: 757404000, y: 3.173597645}, { x: 915170400, y: 3.997685297}, { x: 1072936800, y: 4.22551882}, { x: 1230789600, y: 4.375917768} ], 
+color: palette.color()
+},
+{
+name: "Digestive_System, Female, Black ",
+data: [ { x: -31514400, y: 3.758435645}, { x: 126252000, y: 3.958812666}, { x: 284018400, y: 5.895830151}, { x: 441784800, y: 4.775376259}, { x: 599637600, y: 4.629324547}, { x: 757404000, y: 4.325205291}, { x: 915170400, y: 3.087840017}, { x: 1072936800, y: 3.211190469}, { x: 1230789600, y: 2.908510244} ], 
+color: palette.color()
+},
+{
+name: "Congenital_anomalies, All_Genders, All_Races ",
+data: [ { x: -31514400, y: 0.885488478}, { x: 126252000, y: 0.703081267}, { x: 284018400, y: 0.711350726}, { x: 441784800, y: 0.642068957}, { x: 599637600, y: 0.602082123}, { x: 757404000, y: 0.530301172}, { x: 915170400, y: 0.017077316}, { x: 1072936800, y: 0.029136995}, { x: 1230789600, y: 0.039346052} ], 
+color: palette.color()
+},
+{
+name: "Congenital_anomalies, All_Genders, White ",
+data: [ { x: -31514400, y: 0.855239478}, { x: 126252000, y: 0.670845893}, { x: 284018400, y: 0.673760682}, { x: 441784800, y: 0.600366844}, { x: 599637600, y: 0.557119867}, { x: 757404000, y: 0.494903205}, { x: 915170400, y: 0.010754949}, { x: 1072936800, y: 0.020007129}, { x: 1230789600, y: 0.029014123} ], 
+color: palette.color()
+},
+{
+name: "Congenital_anomalies, All_Genders, Other ",
+data: [ { x: -31514400, y: 1.504169589}, { x: 126252000, y: 1.33734771}, { x: 284018400, y: 0.9262445}, { x: 441784800, y: 0.844548783}, { x: 599637600, y: 0.816981872}, { x: 757404000, y: 0.697550963}, { x: 915170400, y: 0.052833179}, { x: 1072936800, y: 0.06655451}, { x: 1230789600, y: 0.072765556} ], 
+color: palette.color()
+},
+{
+name: "Congenital_anomalies, All_Genders, Black ",
+data: [ { x: -31514400, y: 1.076098379}, { x: 126252000, y: 0.908088038}, { x: 284018400, y: 1.62592116}, { x: 441784800, y: 1.85751449}, { x: 599637600, y: 1.48541837}, { x: 757404000, y: 1.128710738}, { x: 915170400, y: 0.057113224}, { x: 1072936800, y: 0.087868233}, { x: 1230789600, y: 0.107095514} ], 
+color: palette.color()
+},
+{
+name: "Congenital_anomalies, Male, All_Races ",
+data: [ { x: -31514400, y: 0.846866483}, { x: 126252000, y: 0.687750218}, { x: 284018400, y: 0.704130511}, { x: 441784800, y: 0.646098098}, { x: 599637600, y: 0.613542541}, { x: 757404000, y: 0.53668599}, { x: 915170400, y: 0.0}, { x: 1072936800, y: 8.46E-5}, { x: 1230789600, y: 0.0} ], 
+color: palette.color()
+},
+{
+name: "Congenital_anomalies, Male, White ",
+data: [ { x: -31514400, y: 0.821680171}, { x: 126252000, y: 0.655060943}, { x: 284018400, y: 0.675377823}, { x: 441784800, y: 0.612162715}, { x: 599637600, y: 0.573899536}, { x: 757404000, y: 0.507146383}, { x: 915170400, y: 0.424831442}, { x: 1072936800, y: 0.423667084}, { x: 1230789600, y: 0.392455765} ], 
+color: palette.color()
+},
+{
+name: "Congenital_anomalies, Male, Other ",
+data: [ { x: -31514400, y: 1.333174622}, { x: 126252000, y: 1.246827761}, { x: 284018400, y: 0.859575836}, { x: 441784800, y: 0.796371826}, { x: 599637600, y: 0.783751493}, { x: 757404000, y: 0.665504157}, { x: 915170400, y: 0.733120013}, { x: 1072936800, y: 0.768829362}, { x: 1230789600, y: 0.677546692} ], 
+color: palette.color()
+},
+{
+name: "Congenital_anomalies, Male, Black ",
+data: [ { x: -31514400, y: 1.002005584}, { x: 126252000, y: 0.89075377}, { x: 284018400, y: 1.35532177}, { x: 441784800, y: 1.590943858}, { x: 599637600, y: 1.359516616}, { x: 757404000, y: 0.987292739}, { x: 915170400, y: 0.616247267}, { x: 1072936800, y: 0.65572404}, { x: 1230789600, y: 0.638056592} ], 
+color: palette.color()
+},
+{
+name: "Congenital_anomalies, Female, All_Races ",
+data: [ { x: -31514400, y: 0.935125032}, { x: 126252000, y: 0.722134972}, { x: 284018400, y: 0.72004148}, { x: 441784800, y: 0.637560566}, { x: 599637600, y: 0.589748138}, { x: 757404000, y: 0.523644552}, { x: 915170400, y: 0.033601847}, { x: 1072936800, y: 0.05734204}, { x: 1230789600, y: 0.078658673} ], 
+color: palette.color()
+},
+{
+name: "Congenital_anomalies, Female, White ",
+data: [ { x: -31514400, y: 0.898214949}, { x: 126252000, y: 0.690293851}, { x: 284018400, y: 0.671837591}, { x: 441784800, y: 0.587347622}, { x: 599637600, y: 0.539433042}, { x: 757404000, y: 0.482424779}, { x: 915170400, y: 0.381950588}, { x: 1072936800, y: 0.389442583}, { x: 1230789600, y: 0.321855289} ], 
+color: palette.color()
+},
+{
+name: "Congenital_anomalies, Female, Other ",
+data: [ { x: -31514400, y: 1.828442438}, { x: 126252000, y: 1.494539184}, { x: 284018400, y: 1.012322118}, { x: 441784800, y: 0.902849971}, { x: 599637600, y: 0.857095764}, { x: 757404000, y: 0.735458851}, { x: 915170400, y: 0.964459661}, { x: 1072936800, y: 0.796969936}, { x: 1230789600, y: 0.766846141} ], 
+color: palette.color()
+},
+{
+name: "Congenital_anomalies, Female, Black ",
+data: [ { x: -31514400, y: 1.171843239}, { x: 126252000, y: 0.930635659}, { x: 284018400, y: 2.062013136}, { x: 441784800, y: 2.25189544}, { x: 599637600, y: 1.663920923}, { x: 757404000, y: 1.316366828}, { x: 915170400, y: 0.589900728}, { x: 1072936800, y: 0.568839455}, { x: 1230789600, y: 0.584553529} ], 
+color: palette.color()
+},
+{
+name: "Circulatory_system, All_Genders, All_Races ",
+data: [ { x: -31514400, y: 53.5813922}, { x: 126252000, y: 53.19539204}, { x: 284018400, y: 50.32872907}, { x: 441784800, y: 47.98271952}, { x: 599637600, y: 44.58462694}, { x: 757404000, y: 43.3341892}, { x: 915170400, y: 1.116622616}, { x: 1072936800, y: 1.260227127}, { x: 1230789600, y: 1.625852651} ], 
+color: palette.color()
+},
+{
+name: "Circulatory_system, All_Genders, White ",
+data: [ { x: -31514400, y: 54.93448054}, { x: 126252000, y: 54.50636124}, { x: 284018400, y: 51.49054138}, { x: 441784800, y: 48.92308882}, { x: 599637600, y: 45.30896885}, { x: 757404000, y: 43.67743704}, { x: 915170400, y: 1.049091982}, { x: 1072936800, y: 1.219317951}, { x: 1230789600, y: 1.61004444} ], 
+color: palette.color()
+},
+{
+name: "Circulatory_system, All_Genders, Other ",
+data: [ { x: -31514400, y: 35.28173954}, { x: 126252000, y: 36.92760118}, { x: 284018400, y: 42.60317259}, { x: 441784800, y: 41.9295376}, { x: 599637600, y: 40.52125534}, { x: 757404000, y: 41.79607871}, { x: 915170400, y: 1.089684322}, { x: 1072936800, y: 1.136972879}, { x: 1230789600, y: 1.196761159} ], 
+color: palette.color()
+},
+{
+name: "Circulatory_system, All_Genders, Black ",
+data: [ { x: -31514400, y: 44.52174144}, { x: 126252000, y: 44.24787889}, { x: 284018400, y: 36.06269739}, { x: 441784800, y: 36.59349185}, { x: 599637600, y: 35.84082856}, { x: 757404000, y: 36.89456387}, { x: 915170400, y: 1.60933153}, { x: 1072936800, y: 1.578477534}, { x: 1230789600, y: 1.837717156} ], 
+color: palette.color()
+},
+{
+name: "Circulatory_system, Male, All_Races ",
+data: [ { x: -31514400, y: 51.6793009}, { x: 126252000, y: 50.69455317}, { x: 284018400, y: 47.54199042}, { x: 441784800, y: 45.3032711}, { x: 599637600, y: 42.46529454}, { x: 757404000, y: 41.72364449}, { x: 915170400, y: 1.098153753}, { x: 1072936800, y: 1.16580848}, { x: 1230789600, y: 1.452814685} ], 
+color: palette.color()
+},
+{
+name: "Circulatory_system, Male, White ",
+data: [ { x: -31514400, y: 53.26694028}, { x: 126252000, y: 52.24377564}, { x: 284018400, y: 48.89542445}, { x: 441784800, y: 46.46113125}, { x: 599637600, y: 43.41442935}, { x: 757404000, y: 42.17118007}, { x: 915170400, y: 38.39398028}, { x: 1072936800, y: 34.89886992}, { x: 1230789600, y: 31.64812174} ], 
+color: palette.color()
+},
+{
+name: "Circulatory_system, Male, Other ",
+data: [ { x: -31514400, y: 35.98381145}, { x: 126252000, y: 37.30552797}, { x: 284018400, y: 38.60780848}, { x: 441784800, y: 37.84739689}, { x: 599637600, y: 37.12783751}, { x: 757404000, y: 39.49463482}, { x: 915170400, y: 35.77301632}, { x: 1072936800, y: 32.92746565}, { x: 1230789600, y: 31.17303953} ], 
+color: palette.color()
+},
+{
+name: "Circulatory_system, Male, Black ",
+data: [ { x: -31514400, y: 40.91155767}, { x: 126252000, y: 40.13151111}, { x: 284018400, y: 35.96815468}, { x: 441784800, y: 36.07924124}, { x: 599637600, y: 35.34743202}, { x: 757404000, y: 36.90301856}, { x: 915170400, y: 33.51795617}, { x: 1072936800, y: 33.21131124}, { x: 1230789600, y: 31.51070487} ], 
+color: palette.color()
+},
+{
+name: "Circulatory_system, Female, All_Races ",
+data: [ { x: -31514400, y: 56.02593857}, { x: 126252000, y: 56.30347968}, { x: 284018400, y: 53.68304149}, { x: 441784800, y: 50.98087837}, { x: 599637600, y: 46.86550504}, { x: 757404000, y: 45.01329472}, { x: 915170400, y: 1.134493651}, { x: 1072936800, y: 1.351892}, { x: 1230789600, y: 1.798743592} ], 
+color: palette.color()
+},
+{
+name: "Circulatory_system, Female, White ",
+data: [ { x: -31514400, y: 57.06990391}, { x: 126252000, y: 57.29399556}, { x: 284018400, y: 54.57663278}, { x: 441784800, y: 51.64037632}, { x: 599637600, y: 47.30593244}, { x: 757404000, y: 45.21263626}, { x: 915170400, y: 42.31458082}, { x: 1072936800, y: 37.65557469}, { x: 1230789600, y: 32.6972769} ], 
+color: palette.color()
+},
+{
+name: "Circulatory_system, Female, Other ",
+data: [ { x: -31514400, y: 33.9503386}, { x: 126252000, y: 36.27131634}, { x: 284018400, y: 47.76168942}, { x: 441784800, y: 46.86952694}, { x: 599637600, y: 44.61760343}, { x: 757404000, y: 44.51843669}, { x: 915170400, y: 36.57713266}, { x: 1072936800, y: 34.49459481}, { x: 1230789600, y: 30.82395171} ], 
+color: palette.color()
+},
+{
+name: "Circulatory_system, Female, Black ",
+data: [ { x: -31514400, y: 49.18692577}, { x: 126252000, y: 49.60226159}, { x: 284018400, y: 36.21506033}, { x: 441784800, y: 37.35430576}, { x: 599637600, y: 36.54036244}, { x: 757404000, y: 36.88334483}, { x: 915170400, y: 40.48955309}, { x: 1072936800, y: 37.84687915}, { x: 1230789600, y: 34.12224297} ], 
+color: palette.color()
+},
+{
+name: "Cancer, All_Genders, All_Races ",
+data: [ { x: -31514400, y: 17.10159782}, { x: 126252000, y: 18.92039974}, { x: 284018400, y: 21.3882582}, { x: 441784800, y: 22.55839483}, { x: 599637600, y: 23.38528195}, { x: 757404000, y: 23.77530794}, { x: 915170400, y: 23.53291663}, { x: 1072936800, y: 23.67941469}, { x: 1230789600, y: 23.88850476} ], 
+color: palette.color()
+},
+{
+name: "Cancer, All_Genders, White ",
+data: [ { x: -31514400, y: 17.4791016}, { x: 126252000, y: 19.19935169}, { x: 284018400, y: 21.62342312}, { x: 441784800, y: 22.68767979}, { x: 599637600, y: 23.73032253}, { x: 757404000, y: 24.09770479}, { x: 915170400, y: 23.71490471}, { x: 1072936800, y: 23.82674215}, { x: 1230789600, y: 23.95786153} ], 
+color: palette.color()
+},
+{
+name: "Cancer, All_Genders, Other ",
+data: [ { x: -31514400, y: 15.33006001}, { x: 126252000, y: 17.11244924}, { x: 284018400, y: 19.81556598}, { x: 441784800, y: 21.66121432}, { x: 599637600, y: 21.08806452}, { x: 757404000, y: 21.55011325}, { x: 915170400, y: 24.03249241}, { x: 1072936800, y: 25.18718456}, { x: 1230789600, y: 25.42304655} ], 
+color: palette.color()
+},
+{
+name: "Cancer, All_Genders, Black ",
+data: [ { x: -31514400, y: 14.38433605}, { x: 126252000, y: 16.91061723}, { x: 284018400, y: 18.61621242}, { x: 441784800, y: 21.69230067}, { x: 599637600, y: 22.51976015}, { x: 757404000, y: 23.66790582}, { x: 915170400, y: 22.13715583}, { x: 1072936800, y: 22.33183386}, { x: 1230789600, y: 23.03739622} ], 
+color: palette.color()
+},
+{
+name: "Cancer, Male, All_Races ",
+data: [ { x: -31514400, y: 16.55099424}, { x: 126252000, y: 18.61249655}, { x: 284018400, y: 21.30663394}, { x: 441784800, y: 22.82456508}, { x: 599637600, y: 23.89958682}, { x: 757404000, y: 24.40410429}, { x: 915170400, y: 24.84940079}, { x: 1072936800, y: 24.87393749}, { x: 1230789600, y: 24.98454191} ], 
+color: palette.color()
+},
+{
+name: "Cancer, Male, White ",
+data: [ { x: -31514400, y: 16.86633946}, { x: 126252000, y: 18.83939919}, { x: 284018400, y: 21.50517472}, { x: 441784800, y: 22.88490892}, { x: 599637600, y: 24.27916203}, { x: 757404000, y: 24.86127669}, { x: 915170400, y: 25.17327345}, { x: 1072936800, y: 25.15026555}, { x: 1230789600, y: 25.22139394} ], 
+color: palette.color()
+},
+{
+name: "Cancer, Male, Other ",
+data: [ { x: -31514400, y: 14.64111415}, { x: 126252000, y: 16.04325279}, { x: 284018400, y: 20.21770566}, { x: 441784800, y: 22.64048727}, { x: 599637600, y: 21.75115207}, { x: 757404000, y: 21.73697238}, { x: 915170400, y: 23.19656527}, { x: 1072936800, y: 24.7834406}, { x: 1230789600, y: 25.07806516} ], 
+color: palette.color()
+},
+{
+name: "Cancer, Male, Black ",
+data: [ { x: -31514400, y: 14.33245507}, { x: 126252000, y: 17.10913518}, { x: 284018400, y: 16.99364989}, { x: 441784800, y: 20.32277803}, { x: 599637600, y: 21.17127585}, { x: 757404000, y: 22.30147858}, { x: 915170400, y: 22.8930033}, { x: 1072936800, y: 22.95520377}, { x: 1230789600, y: 23.28155101} ], 
+color: palette.color()
+},
+{
+name: "Cancer, Female, All_Races ",
+data: [ { x: -31514400, y: 17.80922736}, { x: 126252000, y: 19.30306737}, { x: 284018400, y: 21.48650684}, { x: 441784800, y: 22.26056462}, { x: 599637600, y: 22.8317743}, { x: 757404000, y: 23.11974375}, { x: 915170400, y: 22.25904641}, { x: 1072936800, y: 22.51973084}, { x: 1230789600, y: 22.7933989} ], 
+color: palette.color()
+},
+{
+name: "Cancer, Female, White ",
+data: [ { x: -31514400, y: 18.26379426}, { x: 126252000, y: 19.64283369}, { x: 284018400, y: 21.76404313}, { x: 441784800, y: 22.46999599}, { x: 599637600, y: 23.15181124}, { x: 757404000, y: 23.31946109}, { x: 915170400, y: 22.32513958}, { x: 1072936800, y: 22.55510517}, { x: 1230789600, y: 22.70690017} ], 
+color: palette.color()
+},
+{
+name: "Cancer, Female, Other ",
+data: [ { x: -31514400, y: 16.63656885}, { x: 126252000, y: 18.96915118}, { x: 284018400, y: 19.29635315}, { x: 441784800, y: 20.47615034}, { x: 599637600, y: 20.28762156}, { x: 757404000, y: 21.32907921}, { x: 915170400, y: 25.02772822}, { x: 1072936800, y: 25.6450722}, { x: 1230789600, y: 25.80518845} ], 
+color: palette.color()
+},
+{
+name: "Cancer, Female, Black ",
+data: [ { x: -31514400, y: 14.45137816}, { x: 126252000, y: 16.65239417}, { x: 284018400, y: 21.23109821}, { x: 441784800, y: 23.71845649}, { x: 599637600, y: 24.43163097}, { x: 757404000, y: 25.48110073}, { x: 915170400, y: 21.34680859}, { x: 1072936800, y: 21.69847274}, { x: 1230789600, y: 22.78261737} ], 
+color: palette.color()
+},
+{
+name: "Blood_Diseases, All_Genders, All_Races ",
+data: [ { x: -31514400, y: 0.256036712}, { x: 126252000, y: 0.277359492}, { x: 284018400, y: 0.324085861}, { x: 441784800, y: 0.358271834}, { x: 599637600, y: 0.399469046}, { x: 757404000, y: 0.426107485}, { x: 915170400, y: 0.435033132}, { x: 1072936800, y: 0.439264164}, { x: 1230789600, y: 0.396534433} ], 
+color: palette.color()
+},
+{
+name: "Blood_Diseases, All_Genders, White ",
+data: [ { x: -31514400, y: 0.239008519}, { x: 126252000, y: 0.257121301}, { x: 284018400, y: 0.307484099}, { x: 441784800, y: 0.345268377}, { x: 599637600, y: 0.381269484}, { x: 757404000, y: 0.408487491}, { x: 915170400, y: 0.402874575}, { x: 1072936800, y: 0.406212699}, { x: 1230789600, y: 0.356979046} ], 
+color: palette.color()
+},
+{
+name: "Blood_Diseases, All_Genders, Other ",
+data: [ { x: -31514400, y: 0.311744993}, { x: 126252000, y: 0.30107828}, { x: 284018400, y: 0.446371983}, { x: 441784800, y: 0.448759238}, { x: 599637600, y: 0.523122305}, { x: 757404000, y: 0.553864666}, { x: 915170400, y: 0.83872672}, { x: 1072936800, y: 0.782015492}, { x: 1230789600, y: 0.719914539} ], 
+color: palette.color()
+},
+{
+name: "Blood_Diseases, All_Genders, Black ",
+data: [ { x: -31514400, y: 0.379981999}, { x: 126252000, y: 0.430052557}, { x: 284018400, y: 0.374312785}, { x: 441784800, y: 0.442700014}, { x: 599637600, y: 0.422458436}, { x: 757404000, y: 0.385216314}, { x: 915170400, y: 0.603367928}, { x: 1072936800, y: 0.61262712}, { x: 1230789600, y: 0.611874695} ], 
+color: palette.color()
+},
+{
+name: "Blood_Diseases, Male, All_Races ",
+data: [ { x: -31514400, y: 0.216666081}, { x: 126252000, y: 0.23931471}, { x: 284018400, y: 0.292750952}, { x: 441784800, y: 0.324903521}, { x: 599637600, y: 0.372424801}, { x: 757404000, y: 0.403458758}, { x: 915170400, y: 0.455002781}, { x: 1072936800, y: 0.460332302}, { x: 1230789600, y: 0.429874384} ], 
+color: palette.color()
+},
+{
+name: "Blood_Diseases, Male, White ",
+data: [ { x: -31514400, y: 0.201717828}, { x: 126252000, y: 0.219206592}, { x: 284018400, y: 0.280393099}, { x: 441784800, y: 0.312864176}, { x: 599637600, y: 0.357690128}, { x: 757404000, y: 0.391766543}, { x: 915170400, y: 0.28097055}, { x: 1072936800, y: 0.299292303}, { x: 1230789600, y: 0.304687335} ], 
+color: palette.color()
+},
+{
+name: "Blood_Diseases, Male, Other ",
+data: [ { x: -31514400, y: 0.238066897}, { x: 126252000, y: 0.209643606}, { x: 284018400, y: 0.382390746}, { x: 441784800, y: 0.400120733}, { x: 599637600, y: 0.4744837}, { x: 757404000, y: 0.4911277}, { x: 915170400, y: 0.384786747}, { x: 1072936800, y: 0.274830405}, { x: 1230789600, y: 0.344665056} ], 
+color: palette.color()
+},
+{
+name: "Blood_Diseases, Male, Black ",
+data: [ { x: -31514400, y: 0.326398993}, { x: 126252000, y: 0.391043284}, { x: 284018400, y: 0.303288788}, { x: 441784800, y: 0.443628576}, { x: 599637600, y: 0.319544504}, { x: 757404000, y: 0.316500543}, { x: 915170400, y: 0.625843998}, { x: 1072936800, y: 0.70087453}, { x: 1230789600, y: 0.655818338} ], 
+color: palette.color()
+},
+{
+name: "Blood_Diseases, Female, All_Races ",
+data: [ { x: -31514400, y: 0.306635405}, { x: 126252000, y: 0.324642233}, { x: 284018400, y: 0.361802737}, { x: 441784800, y: 0.395609184}, { x: 599637600, y: 0.428574734}, { x: 757404000, y: 0.449720368}, { x: 915170400, y: 0.41570989}, { x: 1072936800, y: 0.418810489}, { x: 1230789600, y: 0.36322281} ], 
+color: palette.color()
+},
+{
+name: "Blood_Diseases, Female, White ",
+data: [ { x: -31514400, y: 0.286762335}, { x: 126252000, y: 0.303834382}, { x: 284018400, y: 0.33970049}, { x: 441784800, y: 0.381033223}, { x: 599637600, y: 0.406123605}, { x: 757404000, y: 0.425529726}, { x: 915170400, y: 0.377030739}, { x: 1072936800, y: 0.384396016}, { x: 1230789600, y: 0.386550298} ], 
+color: palette.color()
+},
+{
+name: "Blood_Diseases, Female, Other ",
+data: [ { x: -31514400, y: 0.451467269}, { x: 126252000, y: 0.45985821}, { x: 284018400, y: 0.528979795}, { x: 441784800, y: 0.507618967}, { x: 599637600, y: 0.581836163}, { x: 757404000, y: 0.628075678}, { x: 915170400, y: 0.462940638}, { x: 1072936800, y: 0.43399353}, { x: 1230789600, y: 0.411160059} ], 
+color: palette.color()
+},
+{
+name: "Blood_Diseases, Female, Black ",
+data: [ { x: -31514400, y: 0.449223514}, { x: 126252000, y: 0.480794032}, { x: 284018400, y: 0.488773484}, { x: 441784800, y: 0.441326242}, { x: 599637600, y: 0.568369028}, { x: 757404000, y: 0.476399423}, { x: 915170400, y: 0.838619503}, { x: 1072936800, y: 0.872314598}, { x: 1230789600, y: 0.883958996} ], 
+color: palette.color()
+}
+                        
+                        ]
+                        } );
+
+                        graph.render();
+
+                        var slider = new Rickshaw.Graph.RangeSlider( {
+	                graph: graph,
+	                element: $('#slider')
+                        } );
+
+                        var hoverDetail = new Rickshaw.Graph.HoverDetail( {
+	                graph: graph
+			} );
+
+                        var annotator = new Rickshaw.Graph.Annotate( {
+	                graph: graph,
+	                element: document.getElementById('timeline')
+                        } );
+
+                        var legend = new Rickshaw.Graph.Legend( {
+	                graph: graph,
+	                element: document.getElementById('legend')
+
+                        } );
+
+                        var shelving = new Rickshaw.Graph.Behavior.Series.Toggle( {
+	                graph: graph,
+	                legend: legend
+                        } );
+
+                        var order = new Rickshaw.Graph.Behavior.Series.Order( {
+	                graph: graph,
+	                legend: legend
+                        } );
+
+                        var highlighter = new Rickshaw.Graph.Behavior.Series.Highlight( {
+	                graph: graph,
+	                legend: legend
+                        } );
+
+                        var smoother = new Rickshaw.Graph.Smoother( {
+	                graph: graph,
+	                element: $('#smoother')
+                        } );
+
+                        var ticksTreatment = 'glow';
+
+                        var xAxis = new Rickshaw.Graph.Axis.Time( {
+	                graph: graph,
+	                ticksTreatment: ticksTreatment
+                        } );
+
+                        xAxis.render();
+
+                        var yAxis = new Rickshaw.Graph.Axis.Y( {
+	                graph: graph,
+	                tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
+	                ticksTreatment: ticksTreatment
+                        } );
+
+                        yAxis.render();
+
+
+                        var controls = new RenderControls( {
+	                element: document.querySelector('form'),
+	                graph: graph
+                        } );
+
+var numOpts = new Array(12, 4, 1);
+var blueOpts = new Array("blue_Cause_of_Death", "blue_Sex", "blue_Race");
+var redOpts = new Array("red_Cause_of_Death", "red_Sex", "red_Race");
+
+      function getRadio(id) {
+      var radios = document.getElementsByName(id);
+
+      for (var i = 0; i < radios.length; i++) {       
+	 if (radios[i].checked) {
+		return radios[i].value;
+		break;
+         }
+      }
+      }	
+
+      var red = this.legend.lines[0];
+      var blue = this.legend.lines[numOpts[0]];
+
+      function disableOthers(){
+
+      // these must happen first or else we try ( and probably fail ) to make a no line graph
+      this.red.series.enable();
+      this.red.element.classList.remove('disabled');
+
+      for (var i = 1; i < this.legend.lines.length; i++) {
+      
+      legend.lines[i].series.disable();
+      legend.lines[i].element.classList.add('disabled');
+      }
+      this.blue.series.enable();
+      this.blue.element.classList.remove('disabled');
+      
+      };
+      
+      function blueFunc()
+      {
+      var val = 0;
+      for (var i = 0; i < numOpts.length; i++) {
+	val = val + numOpts[i]*getRadio(blueOpts[i]);
+      }
+      if(blue != red) {
+      this.blue.series.disable();
+      this.blue.element.classList.add('disabled');
+      }
+
+      this.blue = legend.lines[val];
+      this.blue.series.enable();
+      this.blue.element.classList.remove('disabled');
+      }
+
+      function redFunc()
+      {
+      var val = 0;
+      for (var i = 0; i < numOpts.length; i++) {
+	val = val + numOpts[i]*getRadio(redOpts[i]);
+      }
+      if(blue != red) {
+      this.red.series.disable();
+      this.red.element.classList.add('disabled');
+      }
+
+      this.red = legend.lines[val];
+      this.red.series.enable();
+      this.red.element.classList.remove('disabled');
+      }
+      
+      var init = this.disableOthers();		  
+			  
+  </script>
+
+</body>
